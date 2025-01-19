@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record model="rest.days" id="sunday">
+            <field name="name">Sunday</field>
+        </record>     
+        <record model="rest.days" id="monday">
+            <field name="name">Monday</field>
+        </record>
+        <record model="rest.days" id="tuesday">
+            <field name="name">Tuesday</field>
+        </record>
+        <record model="rest.days" id="wednesday">
+            <field name="name">Wednesday</field>
+        </record>
+        <record model="rest.days" id="thursday">
+            <field name="name">Thursday</field>
+        </record>
+        <record model="rest.days" id="friday">
+            <field name="name">Friday</field>
+        </record>
+        <record model="rest.days" id="saturday">
+            <field name="name">Saturday</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	<record id="wizard_shift_report_form" model="ir.ui.view">
+		<field name="name">shift.report.form</field>
+		<field name="model">shift.report</field>
+		<field name="arch" type="xml">
+			<form string="Shift Excel">
+				<group col="4">
+					<field name="date_from" required="1" />
+					<field name="date_to" required="1" />
+				</group>
+				<group col="2">
+					<group name="shift">
+						<field name="shift_mode" widget="radio" />
+						<field name="shift_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_quick_create': True}" invisible="shift_mode != 'shift'" />
+					</group>
+					<group name="department">
+						<field name="mode" widget="radio" />
+						<field name="department_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_quick_create': True}" invisible="mode != 'department'" />
+					</group>
+					<group>
+						<p>
+							Click on the link to download the file: <field name="excelfile" readonly="1" filename="file_name" />
+							<field name="file_name" invisible="1" />
+						</p>
+					</group>
+				</group>
+				<footer>
+					<button name="do_generate_excel" string="Generate Excel" type="object" class="oe_highlight" />
+					or
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_wizard_shift_report" model="ir.actions.act_window">
+		<field name="name">Shift Report - Excel</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">shift.report</field>
+<!--		<field name="view_type">form</field>-->
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="menu_wizard_shift_report" action="action_wizard_shift_report" parent="hr.menu_human_resources_configuration" sequence="60" />
+	</data>
+</odoo>

@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_penalty,access_hr_penalty,model_hr_penalty,base.group_user,1,1,1,0
+access_hr_penalty_line,access_hr_penalty_line,model_hr_penalty_line,base.group_user,1,1,1,0
+access_patch_delay_cal,access_patch_delay_cal,model_patch_delay_cal,base.group_user,1,1,1,0
+access_employee_delay,access_employee_delay,model_employee_delay,base.group_user,1,1,1,0
+access_employee_delay_line,access_employee_delay_line,model_employee_delay_line,base.group_user,1,1,1,1
+access_month_line,access_month_line,model_month_line,base.group_user,1,1,1,0
+hr_attendance.access_hr_attendance_user,hr.attendance.user,hr_attendance.model_hr_attendance,hr.group_hr_user,1,0,0,0
+hr_attendance.access_hr_attendance_system_user,hr.attendance.system.user,hr_attendance.model_hr_attendance,base.group_user,1,0,0,0
+access_hr_attendance_manager,hr.attendance.manager,hr_attendance.model_hr_attendance,hr.group_hr_manager,1,1,1,1
+access_hr_payslip_line_employee,hr.payslip.line,hr_payroll.model_hr_payslip_line,base.group_user,1,0,0,0
+access_hr_payslip_input_user_employee,hr.payslip.input.employee,hr_payroll.model_hr_payslip_input,base.group_user,1,0,0,0
+access_additional_flexible_hours_employee,additional_flexible_hours_employee,model_additional_flexible_hours,base.group_user,1,0,0,0
+access_additional_flexible_hours,additional_flexible_hours,model_additional_flexible_hours,hr.group_hr_manager,1,1,1,1
+access_hr_penalty_absent_line,hr_penalty_absent_line,model_hr_penalty_absent_line,base.group_user,1,1,1,0

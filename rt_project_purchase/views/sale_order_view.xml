@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_sale_order_form_inherit_form2" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.forms2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="project_po_id" force-save="1" invisible="1"/>
+                <field name="opportunity_id" invisible="1"/>
+                <field name="project_po_name" force-save="1" invisible="project_po_id == False"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

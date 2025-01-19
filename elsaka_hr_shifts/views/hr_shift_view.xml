@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	<menuitem id="menu_shift_config" name="Shifts" parent="hr.menu_human_resources_configuration" sequence="20" groups="hr.group_hr_manager" />
+
+	<record model="ir.ui.view" id="hr_shift_form_view">
+		<field name="name">HR Shifts</field>
+		<field name="model">hr.shifts</field>
+		<field name="arch" type="xml">
+			<form string="Shifts">
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="is_ramadan" />
+							<field name="break_hours" />
+							<field name="total_working_hours" />
+						</group>
+						<group>
+							<label for="from_hours" string="Hours" />
+							<div>
+								<field name="from_hours" class="oe_inline" />
+								-
+								<field name="to_hours" class="oe_inline" />
+								<div>Example Of From Hours and To Hours</div>
+								<div>08.30 = 08 hours and 30 minits</div>
+								<div>18.45 = 18 hours and 45 minits</div>
+							</div>
+							<field name="flexible_hours" />
+						</group>
+						<group string="Rest Days">
+							<field name="rest_days" />
+						</group>
+						<group string="Rest Periods">
+							<field name="rest_period_ids">
+								<list editable="bottom">
+									<field name="name" />
+									<field name="from_period" />
+									<field name="to_period" />
+								</list>
+								<form>
+									<field name="name" />
+									<field name="from_period" />
+									<field name="to_period" />
+								</form>
+							</field>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="hr_shift_tree_view">
+		<field name="name">HR Shifts</field>
+		<field name="model">hr.shifts</field>
+		<field name="arch" type="xml">
+			<list string="Shifts">
+				<field name="name" />
+				<field name="from_hours" />
+				<field name="to_hours" />
+				<field name="is_ramadan" />
+				<field name="rest_days" widget="many2many_tags" />
+			</list>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="open_view_shift">
+		<field name="name">Shifts</field>
+		<field name="res_model">hr.shifts</field>
+<!--		<field name="view_type">form</field>-->
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<menuitem action="open_view_shift" id="menu_open_view_shift" parent="menu_shift_config" sequence="20" groups="hr.group_hr_manager" />
+
+	<record model="ir.ui.view" id="hr_shift_assign_form_view">
+		<field name="name">Shifts Assign</field>
+		<field name="model">assign.shift</field>
+		<field name="arch" type="xml">
+			<form string="Assign Shifts">
+				<sheet>
+					<div class="oe_title">
+						<label for="name" />
+						<h1>
+							<field name="name" class="oe_inline" />
+						</h1>
+						<label for="mode" />
+						<div>
+							<field name="mode" class="oe_inline" />
+						</div>
+					</div>
+					<group>
+						<field name="employee_id" widget="many2many_tags" invisible="mode != 'employee'" />
+						<field name="tag_id" widget="many2many_tags" invisible="mode != 'tag'" />
+						<field name="department_id" widget="many2many_tags" invisible="mode != 'department'" />
+						<field name="company_id" groups="base.group_multi_company" widget="many2many_tags" invisible="mode != 'company'" />
+					</group>
+					<group string="Shifts">
+						<field name="line_ids">
+							<list editable="bottom">
+								<field name="shift_id" required="1" />
+								<field name="rest_days" widget="many2many_tags" options="{'no_create': True}" />
+								<field name="rest_period" widget="many2many_tags" options="{'no_create': True}" />
+								<field name="flexible_hours" />
+								<field name="start_from" required="1" />
+								<field name="to_date" required="1" />
+								<field name="is_ramadan" />
+								<field name="assign_shift_id" invisible="1" />
+							</list>
+						</field>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.actions.act_window" id="open_view_shift_assign">
+		<field name="name">Shifts Assign</field>
+		<field name="res_model">assign.shift</field>
+<!--		<field name="view_type">form</field>-->
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<record model="ir.ui.view" id="hr_shift_assign_tree_view">
+		<field name="name">Shifts Assign</field>
+		<field name="model">assign.shift</field>
+		<field name="arch" type="xml">
+			<list>
+				<field name="name" />
+				<field name="mode" />
+			</list>
+		</field>
+	</record>
+
+	<menuitem action="open_view_shift_assign" id="menu_open_view_shift_assign" parent="menu_shift_config" sequence="21" groups="hr.group_hr_manager" />
+
+	<record model="ir.ui.view" id="rest_period_form_view">
+		<field name="name">Rest Period</field>
+		<field name="model">rest.period</field>
+		<field name="arch" type="xml">
+			<form string="Rest Period">
+				<sheet>
+					<group col="2">
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="from_period" />
+							<field name="to_period" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="rest_period_tree_view">
+		<field name="name">Rest Period</field>
+		<field name="model">rest.period</field>
+		<field name="arch" type="xml">
+			<list string="Rest Period">
+				<field name="name" />
+				<field name="from_period" />
+				<field name="to_period" />
+			</list>
+		</field>
+	</record>
+	<record model="ir.actions.act_window" id="open_rest_period">
+		<field name="name">Rest Period</field>
+		<field name="res_model">rest.period</field>
+<!--		<field name="view_type">form</field>-->
+		<field name="view_mode">list,form</field>
+	</record>
+	<menuitem action="open_rest_period" id="menu_open_rest_period" parent="menu_shift_config" sequence="19" groups="hr.group_hr_manager" />
+
+	</data>
+</odoo>

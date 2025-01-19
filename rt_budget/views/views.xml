@@ -1,0 +1,86 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="rt_budget_form">
+            <field name="name">rt_budget form</field>
+            <field name="model">project.budget</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div id="budget" name="Budget">
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                </group>
+                                <group>
+                                    <field name="date_from"/>
+                                </group>
+                            </group>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="date_to"/>
+                            </group>
+                            <group>
+                                <field name="project_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="budget" string="Budget">
+                                <field name="budget_line_ids" mode="list,kanban" widget="one2many">
+                                    <list string="budget" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="department_id"/>
+                                        <field name="amount_planing_hours"/>
+                                        <field name="task_planned_hours"/>
+                                        <field name="multiplier" force_save="1"/>
+                                        <field name="hour_cost" force_save="1" readonly="1"/>
+                                        <field name="actually_cost_hour"/>
+                                        <field name="amount_actually_hours"/>
+                                        <field name="actually_time_sheet_hour"/>
+<!--                                        <field name="actually_cost_hours"/>-->
+                                        <field name="pm_percentage"/>
+                                        <field name="etc_hours"/>
+                                        <field name="etc_cost_planned"/>
+<!--                                        <field name="note"/>-->
+                                    </list>
+                                </field>
+                            </page>
+                            <page name="note" string="Note">
+                                <field name="note"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="rt_budget_list">
+            <field name="name">rt_budget list</field>
+            <field name="model">project.budget</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="budget_action_window">
+            <field name="name">Project Budget Action Window</field>
+            <field name="res_model">project.budget</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem name="Budget Department" id="project_budget_menu"
+                  parent="project.menu_main_pm"
+                  sequence="152" />
+        <menuitem name="Budgets" id="budget_model_menu"
+                  parent="project_budget_menu"
+                  sequence="0"
+                  action="budget_action_window"/>
+    </data>
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rt_buget_phase_project_task,rt_buget_phase.project_task,model_project_task,rt_buget_phase.group_project_task_allocated_time,1,1,1,1

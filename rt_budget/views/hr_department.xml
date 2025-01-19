@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+
+        <record id="add_multiplier_to_hr_department" model="ir.ui.view">
+            <field name="name">add.multiplier.to.hr.department</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <field name="color" position="after">
+                    <field name="hour_cost"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="add_multiplier_to_hr_department_tree_view" model="ir.ui.view">
+            <field name="name">add.multiplier.to.hr.department.tree.view</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_tree"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="hour_cost"/>
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

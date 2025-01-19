@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_shifts,access_hr_shifts,model_hr_shifts,base.group_user,1,1,1,1
+access_rest_period,access_rest_period,model_rest_period,base.group_user,1,1,1,0
+access_rest_days,access_rest_days,model_rest_days,base.group_user,1,1,1,0
+access_assign_shift,access_assign_shift,model_assign_shift,base.group_user,1,1,1,0
+access_assign_shift_line,access_assign_shift_line,model_assign_shift_line,base.group_user,1,1,1,0

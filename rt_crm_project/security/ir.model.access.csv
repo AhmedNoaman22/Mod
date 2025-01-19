@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_scope_service_line,scope.service.line,model_scope_service_line,base.group_user,1,1,1,1
+access_type_of_service,type.of.service,model_type_of_service,base.group_user,1,1,1,1
+access_type_of_service,type.of.service,model_type_of_service,base.group_user,1,1,1,1
+access_sale_service_line,sale.service.line,model_sale_service_line,base.group_user,1,1,1,1
+access_crm_product,crm.product,model_crm_product,base.group_user,1,1,1,1
+
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	<record id="wizard_batch_deduction_form" model="ir.ui.view">
+		<field name="name">batch.deduction.form</field>
+		<field name="model">batch.deduction</field>
+		<field name="arch" type="xml">
+			<form string="Batch Deduction">
+				<p class="oe_grey">
+					Click on Batch Deduction button to calculate Employee Deduction based on selection.
+				</p>
+				<footer>
+					<button name="do_update" string="Batch Deduction" type="object" class="oe_highlight" />
+					or
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_wizard_batch_deduction" model="ir.actions.act_window">
+		<field name="name">Batch Deduction</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">batch.deduction</field>
+<!--		<field name="view_type">form</field>-->
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="binding_model_id" ref="elsaka_hr_penalty.model_employee_delay" />
+	</record>
+
+	</data>
+</odoo>

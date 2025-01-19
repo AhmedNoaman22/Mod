@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_contract_view_form_ext" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.ext</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//group/group/field[@name='structure_type_id']" position="after">
+                    <field name="special_month" />
+                </xpath>
+                <xpath expr="//page[@name='information']/group" position="inside">
+                    <group string="Target Deduction">
+                        <field name="target_dedcution_hours" />
+                        <field name="target_dedcution_rate"/>
+                    </group>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Special Months" invisible="special_month != True">
+                        <button name="calculate_working_hours" string="Calculate Target Hours" type="object" />
+                        <field name="month_line">
+                            <list string="Special Months" editable="top">
+                                <field name="name" required="1" />
+                                <field name="date_from" required="1" />
+                                <field name="date_to" required="1" />
+                                <field name="working_hours" readonly="1" />
+                                <field name="per_hour" readonly="1" />
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="hr_penalty_form_view">
+            <field name="name">HR Penalty</field>
+            <field name="model">hr.penalty</field>
+            <field name="arch" type="xml">
+                <form string="Penalty Rule">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <label for="date_from" string="Date From - to" />
+                                <div>
+                                    <field name="date_from" class="oe_inline" />
+                                    -
+                                    <field name="date_to" class="oe_inline" />
+                                </div>
+                            </group>
+                            <group>
+                                <field name="mode" />
+                                <field name="employee_id" invisible="mode != 'employee'" />
+                                <field name="department_ids" widget="many2many_tags" invisible="mode != 'department'" />
+                                <field name="tag_ids" widget="many2many_tags" invisible="mode != 'tag'" />
+                                <field name="company_id" groups="base.group_multi_company" invisible="mode != 'company'" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Penalty">
+                                <field name="penalty_lines">
+                                    <list editable="bottom">
+                                        <field name="late_early" />
+                                        <field name="action" />
+                                        <field name="from_min" />
+                                        <field name="to_min" />
+                                        <field name="penalty_type" />
+                                        <field name="first_time" />
+                                        <field name="second_time" />
+                                        <field name="third_time" />
+                                        <field name="fourth_time" />
+
+                                        <!--                                    <field name="multiple" attrs="{'readonly':[('penalty_type','=','fixed')]}"/>-->
+                                        <field name="deduction" required="penalty_type == 'fixed'" />
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Absent Penalties">
+                                <field name="absent_penalty_lines">
+                                    <list editable="bottom">
+                                        <field name="first_time" />
+                                        <field name="second_time" />
+                                        <field name="third_time" />
+                                        <field name="fourth_time" />
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page string="Others">
+                                <group col="2">
+                                    <label for="absent_penalty" string="Absent Penalty" />
+                                    <div>
+                                        <field name="absent_penalty" class="oe_inline" />Hours
+                                        <field name="absent_time" class="oe_inline" invisible="1" />
+                                    </div>
+                                    <label for="unpaid_leave_penalty" string="Unpaid Leave Penalty" />
+                                    <div>
+                                        <field name="unpaid_leave_penalty" class="oe_inline" />Hours
+                                        <field name="unpaid_time" class="oe_inline" invisible="1" />
+                                    </div>
+                                    <label for="no_sign_in" string="No sign in" />
+                                    <div>
+                                        <field name="no_sign_in" class="oe_inline" />Hours
+                                        <field name="no_sign_in_time" class="oe_inline" nolabel="1" invisible="1" />
+                                    </div>
+                                    <label for="no_sign_out" string="No sign out" />
+                                    <div>
+                                        <field name="no_sign_out" class="oe_inline" />Hours
+                                        <field name="no_sign_out_time" class="oe_inline" invisible="1" />
+                                    </div>
+                                </group>
+                            </page>
+                            <page name="additional_flex_hours" string="Additional Flexible Hours">
+                                <field name="additional_flexible_line">
+                                    <list string="Additional Flexible Hours" editable="bottom">
+                                        <field name="from_time" required="1"/>
+                                        <field name="to_time" required="1"/>
+                                        <field name="flex_hours" required="1"/>
+                                        <field name="penalty_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_penalty_tree_view">
+            <field name="name">HR Penalty</field>
+            <field name="model">hr.penalty</field>
+            <field name="arch" type="xml">
+                <list string="Penalty">
+                    <field name="name" />
+                    <field name="mode" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_attendance_view_filter_elsaka">
+            <field name="name">hr_attendance_view_filter_elsaka</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="after">
+                    <field name="department_id" />
+                </xpath>
+                <xpath expr="//filter[@name='employee']" position="after">
+                    <filter name="department" string="Department" context="{'group_by':'department_id'}" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_clock_attendance_form_inherit" model="ir.ui.view">
+            <field name="name">hr.attendance.form</field>
+            <field name="model">hr.attendance</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form" />
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <field name="department_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="open_view_penalty_action" model="ir.actions.act_window">
+            <field name="name">Penalty Rule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.penalty</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem action="open_view_penalty_action" id="menu_open_view_penalty" parent="hr_attendance.menu_hr_attendance_root" groups="hr_attendance.group_hr_attendance_manager" />
+
+        <!-- Penalty Calculation -->
+        <record model="ir.ui.view" id="patch_delay_cal_tree_view">
+            <field name="name">Patch Delay Calculation Tree</field>
+            <field name="model">patch.delay.cal</field>
+            <field name="arch" type="xml">
+                <list string="Patch Delays">
+                    <field name="description" />
+                    <field name="company" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                    <field name="approval" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="patch_delay_cal_form_view">
+            <field name="name">Patch Delay Calculation</field>
+            <field name="model">patch.delay.cal</field>
+            <field name="arch" type="xml">
+                <form string="Patch Delays">
+                    <header>
+                        <button name="calculate_delay" string="Calculate Employees Delays" type="object" />
+                    </header>
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="description" />
+                                <field name="company" />
+                                <field name="approval" />
+                            </group>
+                            <group>
+                                <field name="date_from" />
+                                <field name="date_to" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Employees">
+                                <field name="employee_ids" />
+                            </page>
+                        </notebook>
+
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="open_view_patch_delay" model="ir.actions.act_window">
+            <field name="name">Patch Delay Deduction</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">patch.delay.cal</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="main_employee_delay_menu" name="Employee Delay" parent="hr_attendance.menu_hr_attendance_root" sequence="10" />
+
+        <menuitem action="open_view_patch_delay" id="menu_open_view_patch" sequence="10" parent="main_employee_delay_menu" groups="hr_attendance.group_hr_attendance_manager" />
+
+
+        <!-- Employee_Delays Starts -->
+        <record model="ir.ui.view" id="employee_delay_form_view">
+            <field name="name">Employee Delay</field>
+            <field name="model">employee.delay</field>
+            <field name="arch" type="xml">
+                <form string="Employee Delay">
+                    <header>
+                        <button name="action_first_approve" string="First Approve" type="object" groups="hr.group_hr_user" invisible="state not in ['draft']" />
+                        <button name="action_second_approve" string="Second Approve" type="object" groups="hr.group_hr_user" invisible="state not in ['1approve']" />
+                        <button name="action_approved" string="Approve" type="object" groups="hr.group_hr_manager" invisible="state not in ['2approve']" />
+                        <button name="action_reset" string="Reset" type="object" groups="hr.group_hr_user" invisible="state not in ['refuse']" />
+                        <button name="action_refuse" string="Refuse" type="object" groups="hr.group_hr_user" invisible="state not in ['1approve', '2approve']" />
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,1approve,2approve,approved" />
+                    </header>
+                    <group col="2">
+                        <group>
+                            <field name="employee_id" readonly="state == 'approved'" />
+                            <field name="department_id" readonly="state == 'approved'" />
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state == 'approved'" />
+                            <field name="date_to" readonly="state == 'approved'" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee Delay Line">
+                            <button string="Calculate Delay" name="calc_delay" type="object" groups="hr.group_hr_user" invisible="state not in ['draft', '1approve', '2approve', '']" />
+                            <field name="employee_delay_line" readonly="1">
+                                <list string="Lines" editable="top">
+                                    <field name="employee_delay_id"  column_invisible="1"/>
+                                    <field name="date" />
+                                    <field name="time_diff" sum="time_diff" />
+                                    <field name="type" />
+                                    <field name="permission" />
+                                    <field name="permission_hours" sum="permission_hours" />
+                                    <field name="actual_delay" sum="actual_delay"  column_invisible="1"/>
+                                    <field name="ded_applied" sum="ded_applied" />
+                                    <field name="deduction" sum="Total Deduction" />
+                                    <field name="waive" groups="hr.group_hr_manager" />
+                                    <field name="worked_hours" sum="Worked Hours" />
+                                    <field name="working" sum="working" />
+                                    <field name="note" />
+                                    <button name="action_waive" string="Toggle Waive" type="object" class="oe_link"  invisible="dont_show != False" />
+                                    <field name="dont_show" column_invisible="1"/>
+                                    <field name="first_signin"/>
+                                    <field name="last_signout"/>
+                                    <field name="allowed_nextday"/>
+                                    <field name="odd_action" column_invisible="1"/>
+                                    <field name="travel_alw"/>
+                                </list>
+                            </field>
+                            <group col="2">
+                                <group>
+                                    <field name="total_late_deduction" />
+                                    <field name="total_absent_deduction" />
+                                    <field name="total_waived_deduction" />
+                                    <field name="target_deduction"/>
+                                    <field name="total_deduction" />
+                                    <field name="has_ramadan" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="total_worked_hours" />
+                                    <field name="total_working" />
+                                    <field name="total_target_hours"/>
+                                    <field name="total_hours_deduction"/>
+                                    <field name="total_permission_hours"/>
+                                    <field name="total_late_signin"/>
+                                    <field name="total_early_signout"/>
+                                    <field name="total_actual_delay" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="employee_delay_tree_view">
+            <field name="name">Employee Delay</field>
+            <field name="model">employee.delay</field>
+            <field name="arch" type="xml">
+                <list string="Employee Delay">
+                    <field name="employee_id" />
+                    <field name="department_id" />
+                    <field name="date_from" />
+                    <field name="date_to"/>
+                    <field name="total_late_deduction" />
+                    <field name="total_absent_deduction" />
+                    <field name="total_waived_deduction" />
+                    <field name="total_hours_deduction"/>
+                    <field name="target_deduction"/>
+                    <field name="total_deduction" />
+                    <field name="state" />
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="employee_delay_search_view">
+            <field name="name">Employee Delay</field>
+            <field name="model">employee.delay</field>
+            <field name="arch" type="xml">
+                <search string="Employee Delay">
+                    <field name="employee_id" />
+                    <field name="department_id" />
+                    <separator />
+                    <filter domain="[('state','=','draft')]" string="Draft" name="draft" />
+                    <filter domain="[('state','=','1approve')]" string="First Approve" name="1approve" />
+                    <filter domain="[('state','=','2approve')]" string="Second Approve" name="2approve" />
+                    <filter domain="[('state','=','approved')]" string="Approved" name="approved" />
+                    <separator />
+                    <group expand="0" string="Group By">
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}" />
+                        <filter name="group_department" string="Department" context="{'group_by':'department_id'}" />
+                        <filter name="group_state" string="State" context="{'group_by':'state'}" />
+                        <separator />
+                        <filter name="group_date_from" string="Start Month" context="{'group_by':'date_from:month'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="employee_delay_action" model="ir.actions.act_window">
+            <field name="name">All Employee Delay</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.delay</field>
+            <!--		<field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem action="employee_delay_action" id="menu_employee_delay" parent="main_employee_delay_menu" sequence="2" groups="base.group_user" />
+        <!-- Employee_Delays Ends -->
+
+        <record id="view_company_form_elsaka" model="ir.ui.view">
+            <field name="name">res.company.form.elsaka</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page/group" position="inside">
+                    <group name="attendance_config" string="Attendance">
+                        <field name="altern_si_so" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="hr_timesheet.menu_hr_activity_analysis" parent="hr_timesheet.menu_timesheets_reports" action="hr_timesheet.act_hr_timesheet_report" name="Activity Analysis" groups="hr.group_hr_user" />
+
+        <!-- PAYSLIP VIEWS INHERITANCE -->
+        <!--	<record id="view_hr_payslip_filter_elsaka" model="ir.ui.view">-->
+        <!--		<field name="name">hr.payslip.select.elsaka</field>-->
+        <!--		<field name="model">hr.payslip</field>-->
+        <!--		<field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>-->
+        <!--		<field name="arch" type="xml">-->
+        <!--			<xpath expr="//filter[@name='employee_id']" position="after">-->
+        <!--				<filter string="Departments" name="department_id" -->
+        <!--						context="{'group_by':'employee_id.department_id'}"/>-->
+        <!--			</xpath>-->
+        <!--		</field>-->
+        <!--	</record>-->
+
+        <record id="view_employee_form_ext" model="ir.ui.view">
+            <field name="name">hr.employee.form.ext</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='department_id']" position="replace">
+                    <field name="department_id" required="1" />
+                </xpath>
+            </field>
+        </record>
+
+        <!--	<menuitem action="hr_payroll.action_view_hr_payslip_form" -->
+        <!--		id="hr_payroll.menu_department_tree" parent="hr_payroll.menu_hr_payroll_root" -->
+        <!--		groups="hr_payroll.group_hr_payroll_user"/>-->
+
+    </data>
+</odoo>

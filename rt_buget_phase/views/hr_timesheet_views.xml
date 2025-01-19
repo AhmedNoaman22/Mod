@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="hr_timesheet_line_tree_inherit_budget_phase3" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree.inherit.budget.phase</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_amount']" position="before">
+                <field name="hours_spent_edit" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='unit_amount']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or hours_spent_edit == False</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_timesheet_line_form_inherit_budget_phase" model="ir.ui.view">
+        <field name="name">account.analytic.line.form.inherit.budget.phase</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_amount']" position="before">
+                <field name="hours_spent_edit" invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='unit_amount']" position="attributes">
+                <attribute name="readonly">readonly_timesheet or hours_spent_edit == False</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
