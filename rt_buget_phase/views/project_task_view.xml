@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_task_form2_inherit_form_budget_phase" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.budget.phase</field>
+        <field name="model">project.task</field>
+        <field eval="2" name="priority"/>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='milestone_id']" position="before">
+                <field name="budget_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
+                <field name="department_id" nolabel="0" widget="res_partner_many2one" class="o_task_customer_field"/>
+                <field name="allow_task_timesheet_edit" invisible="1"/>
+                <field name="allow_task_timesheet" nolabel="0" class="o_task_customer_field" force-save="1" readonly="allow_task_timesheet_edit == False" invisible="parent_id != False"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_task_form2_inherit_hr_timesheet_form_budget_phase" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.hr.timesheet.budget.phase</field>
+        <field name="model">project.task</field>
+        <field eval="2" name="priority"/>
+        <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allocated_hours']" position="before">
+                <field name="allocated_time_edit" invisible="1"/>
+                <field name="allow_task_timesheet" invisible="1" force-save="1"/>
+            </xpath>
+            <xpath expr="//label[@for='allocated_hours']" position="attributes">
+                <attribute name="invisible">not allow_timesheets or parent_id != False</attribute>
+            </xpath>
+            <xpath expr="//div[@class='text-nowrap']" position="attributes">
+                <attribute name="invisible">not allow_timesheets or parent_id != False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='allocated_hours']" position="attributes">
+                <attribute name="readonly">allocated_time_edit == False or parent_id != False</attribute>
+                <attribute name="invisible">parent_id != False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="invisible">parent_id != False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="invisible">parent_id != False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='timesheet_ids']" position="attributes">
+                <attribute name="readonly">allow_task_timesheet == True or parent_id.allow_task_timesheet == True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

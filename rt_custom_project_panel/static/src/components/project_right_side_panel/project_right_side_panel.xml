@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="rt_custom_project_panel.ProjectRightSidePanel" t-inherit="project.ProjectRightSidePanel" t-inherit-mode="extension">
+        <xpath expr="//ProjectRightSidePanelSection" position="inside">
+            <ProjectRightSidePanelSection name="'phase'" show="!!state.data.phase_items?.data" dataClassName="'py-3'">
+                <t t-set-slot="title">
+                    <a  class="o_rightpanel_button" href="#" t-on-click="() => this.onPhaseItemActionListClick(state.data.phase_items.rec_ids)">
+                    ( <t t-esc="state.data.phase_items.total"/> ) Phase
+                    </a>
+                </t>
+                <span t-if="!state.data.phase_items.data.length" class="text-muted fst-italic">
+                    Not Record Found.
+                </span>
+<!--                <t t-else="state.data" />-->
+                <table t-else="" class="table table-sm table-striped table-hover mb-0">
+                    <thead class="bg-100">
+                        <tr>
+                            <th style="width:50%;" class="text-start">Phase Name</th>
+                            <th style="width:50%;"  class="text-start">Reference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.data.phase_items.data" t-as="phase_items" t-key="phase_items.id">
+                            <tr>
+                                <td>
+                                    <a  class="o_rightpanel_button" href="#" t-on-click="() => this.onPhaseItemActionClick(phase_items.id)">
+                                        <t t-esc="phase_items.name"/>
+                                    </a>
+                                </td>
+                                <td><t t-esc="phase_items.ph_reference"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </ProjectRightSidePanelSection>
+            <ProjectRightSidePanelSection name="'budget'" show="!!state.data.custom_budget_items?.data" dataClassName="'py-3'">
+                <t t-set-slot="title">
+                    <a  class="o_rightpanel_button" href="#" t-on-click="() => this.onBudgetItemActionListClick(state.data.custom_budget_items.rec_ids)">
+                    ( <t t-esc="state.data.custom_budget_items.total"/> ) Budget
+                    </a>
+                </t>
+                <span t-if="!state.data.custom_budget_items.data.length" class="text-muted fst-italic">
+                    Not Record Found.
+                </span>
+<!--                <t t-else="state.data" />-->
+                <table t-else="" class="table table-sm table-striped table-hover mb-0">
+                    <thead class="bg-100">
+                        <tr>
+                            <th style="width:40%;" class="text-start">Budget Name</th>
+                            <th style="width:20%;" class="text-start">Phase</th>
+                            <th style="width:20%;"  class="text-start">Date From</th>
+                            <th style="width:20%;"  class="text-start">Date To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.data.custom_budget_items.data" t-as="custom_budget_items" t-key="custom_budget_items.id">
+                            <tr>
+                                <td>
+                                    <a  class="o_rightpanel_button" href="#" t-on-click="() => this.onBudgetItemActionClick(custom_budget_items.id)">
+                                        <t t-esc="custom_budget_items.name"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <t t-out="custom_budget_items.phase_id[1]"/>
+                                </td>
+                                <td>
+                                    <t t-out="custom_budget_items.date_from" t-options='{"widget": "date"}'/>
+                                </td>
+                                <td>
+                                    <t t-out="custom_budget_items.date_to" t-options='{"widget": "date"}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </ProjectRightSidePanelSection>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+        <record id="add_filed_to_sale_order_view" model="ir.ui.view">
+            <field name="name">add.filed.to.sale.order.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="prefix" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                    <field name="project_location"/>
+                    <field name="country_code2" />
+                    <field name="year" />
+                    <field name="project_city" domain="[('country_id', '=', project_location)]"/>
+                </xpath>
+                <xpath expr="//group[@name='order_details']" position="inside">
+                    <field name="proposal_manager"/>
+                    <field name="contract_status"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="before">
+                    <field name="department_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+<!--		<record id="hr_salary_rule_basic_ins_allowance" model="hr.salary.rule">-->
+<!--			<field name="name">Basic Insurance Allowance</field>-->
+<!--			<field name="category_id" ref="hr_payroll.ALW" />-->
+<!--			<field name="code">BASIC_INSURANCE</field>-->
+<!--			<field name="appears_on_payslip">False</field>-->
+<!--			<field name="condition_select">python</field>-->
+<!--			<field name="condition_python">result = contract.basic_insurance</field>-->
+<!--			<field name="sequence" eval="27" />-->
+<!--			<field name="amount_select">code</field>-->
+<!--			<field name="amount_python_compute">result = contract.basic_insurance</field>-->
+<!--		</record>-->
+<!--		<record id="hr_salary_rule_variable_ins_allowance" model="hr.salary.rule">-->
+<!--			<field name="name">Variable Insurance Allowance</field>-->
+<!--			<field name="category_id" ref="hr_payroll.ALW" />-->
+<!--			<field name="code">VAR_INSURANCE</field>-->
+<!--			<field name="appears_on_payslip">False</field>-->
+<!--			<field name="condition_select">python</field>-->
+<!--			<field name="condition_python">result = contract.variable_insurance</field>-->
+<!--			<field name="sequence" eval="27" />-->
+<!--			<field name="amount_select">code</field>-->
+<!--			<field name="amount_python_compute">result = contract.variable_insurance</field>-->
+<!--		</record>-->
+	</data>
+</odoo>

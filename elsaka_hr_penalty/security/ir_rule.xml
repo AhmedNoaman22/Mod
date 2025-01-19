@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="property_rule_attendace_officer" model="ir.rule">
+            <field name="name">Officer Attendance</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="domain_force">[('employee_id.parent_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_employee_delay_employee" model="ir.rule">
+            <field name="name">All Employee Delay : Employee</field>
+            <field name="model_id" ref="model_employee_delay"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_employee_delay_officer" model="ir.rule">
+            <field name="name">All Employee Delay : Officer</field>
+            <field name="model_id" ref="model_employee_delay"/>
+            <field name="domain_force">['|', ('employee_id.parent_id.user_id','=',user.id),
+                ('employee_id.user_id','=',user.id)]
+            </field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+        </record>
+        <record id="rule_employee_delay_manager" model="ir.rule">
+            <field name="name">All Employee Delay : Manager</field>
+            <field name="model_id" ref="model_employee_delay"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_manager'))]"/>
+        </record>
+
+        <record id="property_rule_employee_payslip_employee" model="ir.rule">
+            <field name="name">Employee Payslip: Employee</field>
+            <field name="model_id" ref="model_hr_payslip"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- TIMESHEET RULES -->
+        <record id="rule_timesheet_officer" model="ir.rule">
+            <field name="name">Officer Timesheet</field>
+            <field name="model_id" ref="analytic.model_account_analytic_line"/>
+            <field name="domain_force">['|',('employee_id.user_id','=',
+                user.id),('employee_id.parent_id.user_id','=',user.id)]
+            </field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+        </record>
+
+
+        <!-- SALARY RULES -->
+        <record id="hr_salary_rule_delay_deduction" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="condition_select">none</field>
+            <field name="code">DELAY</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Delay Deduction</field>
+            <field name="sequence" eval="5"/>
+            <field name="amount_python_compute">result = -(inputs['ABSENT'].amount + inputs['UNPAID'].amount +
+                inputs['LATESIGNIN'].amount + inputs['LATESIGNOUT'].amount)
+            </field>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+        </record>
+
+        <record id="hr_salary_rule_input02" model="hr.payslip.input.type">
+            <field name="code">ABSENT</field>
+            <field name="name">Absent</field>
+            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]"/>
+        </record>
+        <record id="hr_salary_rule_input03" model="hr.payslip.input.type">
+            <field name="code">UNPAID</field>
+            <field name="name">Unpaid</field>
+            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]"/>
+        </record>
+        <record id="hr_salary_rule_input04" model="hr.payslip.input.type">
+            <field name="code">LATESIGNIN</field>
+            <field name="name">Late Sign-In</field>
+            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]"/>
+        </record>
+        <record id="hr_salary_rule_input05" model="hr.payslip.input.type">
+            <field name="code">LATESIGNOUT</field>
+            <field name="name">Late Sign-Out</field>
+            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]"/>
+        </record>
+        <!--        <record id="hr_salary_rule_input06" model="hr.payslip.input.type">-->
+        <!--            <field name="code">TARGETDEDUCTION</field>-->
+        <!--            <field name="name">Target Deduction</field>-->
+        <!--            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]"/>-->
+        <!--        </record>-->
+    </data>
+</odoo>

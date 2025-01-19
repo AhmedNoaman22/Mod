@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="base_hr_hr_contract" model="ir.rule">
+            <field name="name">HR Contract</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract" />
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]" />
+        </record>
+
+        <record id="officer_hr_hr_contract" model="ir.rule">
+            <field name="name">HR Contract Officers</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract" />
+            <field name="domain_force">['|',('employee_id.user_id', '=', user.id), ('employee_id.parent_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_user'))]" />
+        </record>
+
+        <record id="manager_hr_hr_contract" model="ir.rule">
+            <field name="name">HR Contract Manager</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract" />
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('hr.group_hr_manager'))]" />
+        </record>
+
+	</data>
+</odoo>

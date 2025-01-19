@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- explicit search view definition -->
+    <record model="ir.ui.view" id="view_project_milestone_search">
+        <field name="name">project.milestone.search</field>
+        <field name="model">project.milestone</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Milestone Name" filter_domain="['|','|','|',('name','ilike',self),('phase_id','ilike',self),('project_id','ilike',self),('company_id','ilike',self)]"/>
+                <field name="phase_id"/>
+                <field name="project_id"/>
+                <field name="company_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" name="group_by_company_id" domain="" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="project_milestone_view_form_phase_inherit" model="ir.ui.view">
+        <field name="name">project.milestone.form.phase.inherit</field>
+        <field name="model">project.milestone</field>
+        <field name="inherit_id" ref="project.project_milestone_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="phase_id"/>
+                <field name="project_id" readonly="1" force-save="1"/>
+                <field name="company_id"/>
+<!--                <field name="accrual_date"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_milestone_view_tree_phase_inherit" model="ir.ui.view">
+        <field name="name">project.milestone.view.tree.phase.inherit</field>
+        <field name="model">project.milestone</field>
+        <field name="inherit_id" ref="project.project_milestone_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="company_id"/>
+<!--                <field name="accrual_date"/>-->
+            </xpath>
+        </field>
+    </record>
+</odoo>

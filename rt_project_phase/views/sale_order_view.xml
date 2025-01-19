@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_sale_order_form_inherit_form" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.forms</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
+                <field name="milestone_id" domain="[('project_id','=',parent.project_id)]"/>
+                <field name="phase_id" readonly="not parent.project_id" domain="[('project_id','=',parent.project_id)]"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="before">
+                <field name="accrual_date"/>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="domain">[('company_id','=',False)]</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_invoice']" position="before">
+                <button class="oe_stat_button" name="action_view_phase" type="object" icon="fa-check-square-o" invisible="not is_product_milestone or not project_ids or state == 'draft'" groups="project.group_project_milestone">
+                    <field name="phase_count" widget="statinfo" string="Phases"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

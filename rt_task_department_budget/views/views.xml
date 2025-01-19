@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="add_department_to_project_task" model="ir.ui.view">
+            <field name="name">add.department.to.project.task</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <field name="tag_ids" position="after">
+<!--                    <field name="department_id"/>-->
+<!--                    <field name="planning_time"/>-->
+<!--                    <field name="lock_timesheet"/>-->
+                </field>
+                <xpath expr="//page[@name='sub_tasks_page']" position="before">
+                    <page name="Department" string="Department">
+                        <field name="department_line_ids" widget="one2many">
+                            <list string="Department" editable="bottom">
+                                <field name="name"/>
+                                <field name="department_id"/>
+                                <field name="department_hour"/>
+                                <field name="task_id" invisiable="1"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+<!--    Added for recalculate amount of timesheet selected -->
+        <record id="recompute_timesheet_action_server" model="ir.actions.server">
+            <field name="name">Recalculate</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="hr_timesheet.model_account_analytic_line"/>
+            <field name="groups_id" eval="[(4, ref('hr_timesheet.group_timesheet_manager'))]"/>
+            <field name="binding_model_id" ref="hr_timesheet.model_account_analytic_line"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.recalculate()
+            </field>
+        </record>
+    </data>
+</odoo>

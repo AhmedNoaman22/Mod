@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_phase_form2_inherit_form_budget_phase" model="ir.ui.view">
+        <field name="name">project.phase.form.inherit.budget.phase</field>
+        <field name="model">project.phase</field>
+        <field eval="2" name="priority"/>
+        <field name="inherit_id" ref="rt_project_phase.view_project_phase_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='tasks']" position="before">
+                <page name="tasks" string="Budgets">
+                    <field
+                            name="budget_ids"
+                            widget="section_and_note_one2many"
+                            mode="list,kanban"
+                    >
+                        <list string="Budgets Lines" create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="currency_id" column_invisible="True"/>
+                            <field name="total_amount_plan_hours" sum="Total Amount Planning Hours"/>
+                            <field name="total_amount_actual_hours" sum="Total Amount Actual Hours"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='milestones']" position="after">
+                <page name="tasks" string="Customers">
+                    <field name="partner_ids"
+                           readonly="1"
+                           force-save="1    "
+                           widget="section_and_note_one2many"
+                           mode="list,kanban">
+                        <list string="Customers Lines" create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="company_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="crm_project_view" model="ir.ui.view">
+            <field name="name">crm.project.view</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/group[1]" position="after">
+                    <group>
+                        <field name="project_location" required="type == 'opportunity'"/>
+                        <field name="country_code" readonly="1" force_save="1"/>
+                        <field name="year"/>
+                        <field name="project_city" required="type == 'opportunity'"
+                               domain="[('country_id', '=', project_location)]"/>
+                        <field name="proposal_manager"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

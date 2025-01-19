@@ -1,0 +1,16 @@
+<odoo>
+
+    <!-- Project Task Allocated Time User Group -->
+    <record id="group_project_task_allocated_time" model="res.groups">
+        <field name="name">Allow Change Task Allocated Time</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- TimeSheet Hours spent User Group -->
+    <record id="group_hr_lock_timesheet_hours_spent" model="res.groups">
+        <field name="name">Allow Control Lock Timesheet Hours</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+
+</odoo>

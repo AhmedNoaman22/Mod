@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="rt_budget_form_inherit_budget_phase" model="ir.ui.view">
+        <field name="name">project.budget.form.inherit.budget.phase</field>
+        <field name="model">project.budget</field>
+        <field name="inherit_id" ref="rt_budget.rt_budget_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="phase_id" domain="[('project_id','=',project_id)]"/>
+            </xpath>
+            <xpath expr="//field[@name='budget_line_ids']" position="before">
+                <button name="create_Tasks" string="Create Tasks" type="object"/>
+            </xpath>
+<!--            <xpath expr="//field[@name='budget_line_ids']/list/field[@name='name']" position="after">-->
+<!--            </xpath>-->
+            <xpath expr="//field[@name='budget_line_ids']" position="after">
+                <field name="currency_id" invisible="1" force-save="1"/>
+                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                    <group colspan="4">
+                        <field colspan="2" name="note" nolabel="0" placeholder="Terms and conditions..."/>
+                    </group>
+                    <group class="oe_subtotal_footer" colspan="2" name="budget_total">
+                        <field name="total_amount_plan_hours" nolabel="0" colspan="2"
+                               readonly="1"/>
+                        <field name="total_amount_actual_hours" nolabel="0" colspan="2"
+                               readonly="1"/>
+                    </group>
+                    <div class="clearfix"/>
+                </group>
+
+            </xpath>
+            <xpath expr="//div[@id='budget']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="action_view_task" type="object" icon="fa-check-square-o"
+                            groups="project.group_project_milestone">
+                        <field name="task_count" widget="statinfo" string="Tasks"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="rt_budget_list_inherit_budget_phase" model="ir.ui.view">
+        <field name="name">project.budget.list.inherit.budget.phase</field>
+        <field name="model">project.budget</field>
+        <field name="inherit_id" ref="rt_budget.rt_budget_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="company_id"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="date_to"/>
+                <field name="date_from"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="total_amount_plan_hours" sum="Total Amount Planning Hours"/>
+                <field name="total_amount_actual_hours" sum="Total Amount Actual Hours"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="rt_budget_line_list">
+        <field name="name">rt.project.budget.line.list</field>
+        <field name="model">project.budget.line</field>
+        <field name="arch" type="xml">
+            <list create="0" editable="bottom" delete="0">
+                <field name="name" readonly="1"/>
+                <field name="budget_id" readonly="1"/>
+                <field name="company_id" readonly="1"/>
+                <field name="department_id" readonly="1"/>
+                <field name="amount_planing_hours" sum="Total Budget Amount" readonly="1"/>
+                <field name="task_planned_hours" readonly="1"/>
+                <field name="multiplier" force_save="1"/>
+                <field name="hour_cost"/>
+                <field name="actually_cost_hour" force_save="1"/>
+                <field name="amount_actually_hours" sum="Total Cost" force_save="1"/>
+                <field name="actually_time_sheet_hour" force_save="1"/>
+<!--                <field name="actually_cost_hours" sum="Total Actually Cost Hours"/>-->
+                <field name="pm_percentage"/>
+                <field name="etc_hours"/>
+                <field name="etc_cost_planned" sum="Total ETC Cost Planned"/>
+                </list>
+        </field>
+    </record>
+
+        <!-- explicit search view definition -->
+        <record model="ir.ui.view" id="view_budget_line_search">
+            <field name="name">project.budget.line.search</field>
+            <field name="model">project.budget.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Phase Name" filter_domain="['|','|','|',('name','ilike',self),('project_id','ilike',self),('phase_id','ilike',self),('company_id','ilike',self)]"/>
+                    <field name="project_id"/>
+                    <field name="phase_id"/>
+                    <field name="company_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="group_by_project_id" domain="" context="{'group_by': 'project_id'}"/>
+                        <filter string="Phase" name="group_by_phase_id" domain="" context="{'group_by': 'phase_id'}"/>
+                        <filter string="Company" name="group_by_company_id" domain="" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record model="ir.actions.act_window" id="budget_line_action_window">
+        <field name="name">Budgets Lines</field>
+        <field name="res_model">project.budget.line</field>
+        <field name="view_mode">list,search</field>
+    </record>
+
+    <menuitem name="Budgets Lines" id="budget_line_model_menu"
+              parent="rt_budget.project_budget_menu"
+              sequence="1"
+              action="budget_line_action_window"/>
+
+
+</odoo>

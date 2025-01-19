@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequences for Project Phase -->
+    <record id="seq_project_phase" model="ir.sequence">
+        <field name="name">Project Phase Ph</field>
+        <field name="code">project_phase_code</field>
+        <field name="prefix">Ph/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>
