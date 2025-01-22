@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+
+<!--        <record id="add_department_to_timesheet_line" model="ir.ui.view">-->
+<!--            <field name="name">add.department.to.timesheet.line</field>-->
+<!--            <field name="model">account.analytic.line</field>-->
+<!--            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='task_id']" position="after">-->
+<!--                    <field name="hours_spent_edit" invisible="True"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>
