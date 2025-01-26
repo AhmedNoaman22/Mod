@@ -1,0 +1,9 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_zk_machine_location_manager,zk.machine.location,rt_clock_reader.model_zk_machine_location,rt_clock_reader.group_zk_manager,1,1,1,1
+access_zk_machine_manager,zk.machine,rt_clock_reader.model_zk_machine,rt_clock_reader.group_zk_manager,1,1,1,1
+access_zk_employee_location_line_manager,zk.employee.location.line,rt_clock_reader.model_zk_employee_location_line,rt_clock_reader.group_zk_manager,1,1,1,1
+access_zk_create_user_manager,zk.create.user,rt_clock_reader.model_zk_create_user,rt_clock_reader.group_zk_manager,1,1,1,1
+access_zk_machine_location_user,zk.machine.location,rt_clock_reader.model_zk_machine_location,rt_clock_reader.group_zk_user,1,1,1,0
+access_zk_machine_user,zk.machine,rt_clock_reader.model_zk_machine,rt_clock_reader.group_zk_user,1,1,1,0
+access_zk_employee_location_line_user,zk.employee.location.line,rt_clock_reader.model_zk_employee_location_line,rt_clock_reader.group_zk_user,1,1,1,1
+access_zk_create_user_user,zk.create.user,rt_clock_reader.model_zk_create_user,rt_clock_reader.group_zk_user,1,1,1,1
