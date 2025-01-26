@@ -15,12 +15,12 @@ class SaleOrder(models.Model):
     country_code2 = fields.Char(string="Country Code", related="project_location.code", copy=False, store=True)
     year = fields.Char(string="Year", copy=False, compute="_compute_num_of_year", store=True)
     proposal_manager = fields.Many2one(comodel_name='res.users', string="Proposal Manager")
-    prefix = fields.Char(string='Prefix', required=True, default='EGY', copy=False, store=True)
+    suffix = fields.Char(string='Suffix', required=True, default='EGY', copy=False, store=True)
     contract_status = fields.Char(string='Contract Status', copy=False, store=True)
 
     # @api.onchange('project_location')
     # def _onchange_location(self):
-    #     self.prefix = 'PDD' + '/' + str(self.project_location.code) + '/' + str(self.year)
+    #     self.suffix = 'PDD' + '/' + str(self.project_location.code) + '/' + str(self.year)
     #
     @api.depends('date_order')
     def _compute_num_of_year(self):
@@ -45,7 +45,7 @@ class SaleOrder(models.Model):
                 val['proposal_manager'] = get_opp.proposal_manager.id
                 val['country_code2'] = county_code
                 val['year'] = year
-                val['prefix'] = year + '/' + county_code
+                val['suffix'] = year + '/' + county_code
 
 
             elif val and 'project_po_name' in val and val['project_po_name']:
@@ -55,10 +55,10 @@ class SaleOrder(models.Model):
                 year = po_name[2]
                 val['country_code2'] = county_code
                 val['year'] = year
-                val['prefix'] = str(year) + '/' + county_code
+                val['suffix'] = str(year) + '/' + county_code
 
             elif val and 'country_code2' in val and val['country_code2']:
-                val['prefix'] = val['year'] + '/' + val['country_code2']
+                val['suffix'] = val['year'] + '/' + val['country_code2']
             else:
                 if val and 'project_location' in val and val['project_location'] == False:
                     raise ValidationError(_("You Must input ProjectLocation Field !."))
@@ -68,18 +68,18 @@ class SaleOrder(models.Model):
                     current_year = datetime.now().year
                     str1 = str(current_year)
                     year = str1[-2:]
-                    val['prefix'] = year + '/' + county_code
+                    val['suffix'] = year + '/' + county_code
             if val.get('name', _("New")) == _("New"):
-                prefix = val.get('prefix', 'EG')
-                sequence_code = f'sale.order.{prefix}'
+                suffix = val.get('suffix', 'EG')
+                sequence_code = f'sale.order.{suffix}'
                 print('=========== sequence_code', sequence_code)
                 sequence = self.env['ir.sequence'].search([('code', '=', sequence_code)], limit=1)
                 print('====== sequence ========', sequence)
                 if not sequence:
                     sequence = self.env['ir.sequence'].create({
-                        'name': f'Sales Order {prefix} Sequence',
+                        'name': f'Sales Order {suffix} Sequence',
                         'code': sequence_code,
-                        'prefix': f'{prefix}/',
+                        'suffix': f'/{suffix}',
                         'padding': 3,
                         'number_next': 1,
                         'number_increment': 1,

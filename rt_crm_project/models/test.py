@@ -1,4 +1,4 @@
-{'locked': False, 'partner_id': 10, 'prefix': 'PDD', 'sale_order_template_id': 1, 'project_location': 65,
+{'locked': False, 'partner_id': 10, 'suffix': 'PDD', 'sale_order_template_id': 1, 'project_location': 65,
  'opportunity_id': False, 'validity_date': '2024-11-15', 'date_order': '2024-10-01 12:49:49',
  'show_update_pricelist': False, 'company_id': 1, 'pricelist_id': False, 'payment_term_id': 4, 'order_line': [
     [0, 'virtual_162',
