@@ -114,6 +114,10 @@ class AccountAnalyticLine(models.Model):
                 new_val = val + record.unit_amount
                 if new_val > record.total_attendance_hour:
                     raise UserError(_('Time Spent Greater Than Remaining'))
+            else:
+                new_val = record.unit_amount
+                if new_val > record.total_attendance_hour:
+                    raise UserError(_('Time Spent Greater Than Remaining'))
 
     # @api.model
     # def create(self, vals):
