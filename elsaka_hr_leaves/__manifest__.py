@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Elsaka Leave Extension',
+    'version': '17.0',
     'category': 'Human Resources',
     'description': """
     """,

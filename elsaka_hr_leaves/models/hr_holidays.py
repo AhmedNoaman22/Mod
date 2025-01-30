@@ -48,6 +48,8 @@ class HolidaysType(models.Model):
     # unpaid = fields.Boolean('Unpaid')
     can_be_req_before = fields.Integer('Can be Requested before')
     can_be_req_after = fields.Integer('Can be Requested After')
+    is_permission = fields.Boolean()
+    no_deduction_applied = fields.Boolean()
 
 
 class hr_employee(models.Model):
@@ -143,6 +145,7 @@ class hr_leave(models.Model):
 
     holiday_type = fields.Selection([('employee', 'By Employee'),
                                      ('category', 'By Employee Tag'),
+                                     ('company', 'Company'),
                                      ('department', 'By Department')],
                                     string='Allocation Mode',
                                     readonly=True, required=True,

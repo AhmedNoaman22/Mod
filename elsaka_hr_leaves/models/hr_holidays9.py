@@ -1,18 +1,17 @@
 from odoo.tools.translate import _
 from odoo import fields, api, models
-from datetime import datetime
 from odoo.exceptions import UserError
-from dateutil import parser
+from odoo.addons.resource.models.utils import HOURS_PER_DAY
 import time
 
-class HolidaysRequest(models.Model):
-    _inherit='hr.leave'
 
-    @api.onchange('to_time')
-    @api.depends('from_time','to_time')
+class HolidaysRequest(models.Model):
+    _inherit = 'hr.leave'
+
+    @api.onchange('from_time','to_time')
     def _get_total_hours(self):
         if self.from_time and self.to_time and self.from_time > self.to_time:
-            raise UserError(_("From Time can not be grater than To Time" ))
+            raise UserError(_("From Time can not be grater than To Time"))
 
         str_fromtime = str(self.from_time)
         str_totime = str(self.to_time)
@@ -29,35 +28,38 @@ class HolidaysRequest(models.Model):
 
         if int(fromhr) >= 24:
             self.from_time = False
-            raise UserError(_("From Time Hours can not be equal or greater than 24." ))
+            raise UserError(_("From Time Hours can not be equal or greater than 24."))
         if int(tohr) >= 24:
             self.to_time = False
-            raise UserError(_("To Time Hours can not be equal or greater than 24." ))
+            raise UserError(_("To Time Hours can not be equal or greater than 24."))
         if frommin >= '60':
             self.from_time = False
-            raise UserError(_("From Time Minits can not be equal or greater than 60." ))
+            raise UserError(_("From Time Minits can not be equal or greater than 60."))
         if tomin >= '60':
             self.to_time = False
-            raise UserError(_("To Time Minits can not be equal or greater than 60." ))
+            raise UserError(_("To Time Minits can not be equal or greater than 60."))
 
         if self.from_time and self.to_time:
             total_hours = self.convert_float_to_time(self.from_time, self.to_time)
             total_hours = self.revise_time(total_hours)
             self.total_hours = total_hours
 
-    from_time = fields.Float('From', readonly=True, 
-             states={'draft':[('readonly',False)], 'confirm':[('readonly',False)]})
-    to_time = fields.Float('To', readonly=True, 
-             states={'draft':[('readonly',False)], 'confirm':[('readonly',False)]})
-    total_hours = fields.Float(string='Total Hours',
-              readonly=True, states={'draft':[('readonly',False)],'confirm':[('readonly',False)]})
-    appear_time_field = fields.Boolean(string="Appear Time Field", readonly=True, 
-             states={'draft':[('readonly',False)], 'confirm':[('readonly',False)]})
+    from_time = fields.Float('From')
+    to_time = fields.Float('To')
+    total_hours = fields.Float(string='Total Hours')
+    appear_time_field = fields.Boolean(string="Appear Time Field")
     half_day = fields.Boolean('Half-Day Leave', readonly=True,
                               states={'draft': [('readonly', False)], 'confirm': [('readonly', False)]})
     half_day_type = fields.Selection([('first_half', 'First Half'), ('second_half', 'Second Half')],
                                      string="Type", readonly=True,
                                      states={'draft': [('readonly', False)], 'confirm': [('readonly', False)]})
+
+    def action_set_permission_values(self):
+        for rec in self:
+            rec.onchange_request_unit_hours()
+            rec.onchange_from_hour()
+            rec.onchange_to_hour()
+            rec._get_total_hours()
 
     @api.onchange('request_unit_hours')
     def onchange_request_unit_hours(self):
@@ -80,7 +82,6 @@ class HolidaysRequest(models.Model):
             # stop
             self.half_day_type = 'second_half'
         self.number_of_days = 0.5
-
 
     @api.onchange('request_hour_from')
     def onchange_from_hour(self):
@@ -212,42 +213,43 @@ class HolidaysRequest(models.Model):
         if self.request_hour_to == '21':
             self.to_time = 21.0
 
-
-
     @api.onchange('holiday_status_id')
     def onchange_holiday_status_id(self):
         if not self.name:
-            self.name=self.holiday_status_id.name
+            self.name = self.holiday_status_id.name
         if self.holiday_status_id:
             self.appear_time_field = self.holiday_status_id.appear_time_field
         if self.appear_time_field:
             self.request_unit_half = False
 
-    @api.constrains('holiday_status_id','date_from')
+    @api.constrains('holiday_status_id', 'date_from')
     def check_before_after_days(self):
         import datetime
         date_format = '%Y-%m-%d'
         today_str = time.strftime(date_format)
-        if self.date_from:
-            today = datetime.datetime.strptime(time.strftime(date_format), date_format)
+        for rec in self:
+            if rec.date_from:
+                today = datetime.datetime.strptime(time.strftime(date_format), date_format)
 
-            if self.holiday_status_id.can_be_req_before > 0:
-                temp_before = (today + datetime.timedelta(days=self.holiday_status_id.can_be_req_before)).strftime(date_format)
-                if self.date_from.split(' ')[0] <= temp_before:
-                    raise UserError(_('You can not take leave before %s days')%(temp_before))
+                if rec.holiday_status_id.can_be_req_before > 0:
+                    temp_before = (today + datetime.timedelta(days=rec.holiday_status_id.can_be_req_before)).strftime(
+                        date_format)
+                    if rec.date_from.split(' ')[0] <= temp_before:
+                        raise UserError(_('You can not take leave before %s days') % (temp_before))
 
-            if self.holiday_status_id.can_be_req_after > 0:
-                date_from_strptime = (datetime.datetime.strptime(self.date_from.split(' ')[0], date_format))
-                allowed_date = ( date_from_strptime + datetime.timedelta(days=self.holiday_status_id.can_be_req_after) ).strftime(date_format)
-                if today_str < allowed_date: 
-                    raise UserError(_('You can only request after %s.')%(allowed_date))
+                if rec.holiday_status_id.can_be_req_after > 0:
+                    date_from_strptime = (datetime.datetime.strptime(rec.date_from.split(' ')[0], date_format))
+                    allowed_date = (date_from_strptime + datetime.timedelta(
+                        days=rec.holiday_status_id.can_be_req_after)).strftime(date_format)
+                    if today_str < allowed_date:
+                        raise UserError(_('You can only request after %s.') % (allowed_date))
 
     def convert_float_to_time(self, s1, s2):
         from datetime import datetime
-        s1_str0 = len(str(s1).split('.')[0]) == 1 and '0'+str(s1).split('.')[0] or str(s1).split('.')[0]
-        s1_str1 = len(str(s1).split('.')[1]) == 1 and str(s1).split('.')[1]+'0' or str(s1).split('.')[1]
-        s2_str0 = len(str(s2).split('.')[0]) == 1 and '0'+str(s2).split('.')[0] or str(s2).split('.')[0]
-        s2_str1 = len(str(s2).split('.')[1]) == 1 and str(s2).split('.')[1]+'0' or str(s2).split('.')[1]
+        s1_str0 = len(str(s1).split('.')[0]) == 1 and '0' + str(s1).split('.')[0] or str(s1).split('.')[0]
+        s1_str1 = len(str(s1).split('.')[1]) == 1 and str(s1).split('.')[1] + '0' or str(s1).split('.')[1]
+        s2_str0 = len(str(s2).split('.')[0]) == 1 and '0' + str(s2).split('.')[0] or str(s2).split('.')[0]
+        s2_str1 = len(str(s2).split('.')[1]) == 1 and str(s2).split('.')[1] + '0' or str(s2).split('.')[1]
 
         s1_str = s1_str0 + '.' + s1_str1
         s2_str = s2_str0 + '.' + s2_str1
@@ -272,9 +274,20 @@ class HolidaysRequest(models.Model):
             hours = int(hours) + 1
             mins = int(mins) - 60
             if mins < 10:
-                mins = '0'+str(mins)
+                mins = '0' + str(mins)
         else:
             return float_val
         float_val = float(str(hours) + '.' + str(mins))
         return float_val
 
+    def _prepare_employees_holiday_values(self, employees):
+        res = super()._prepare_employees_holiday_values(employees)
+        for rec in res:
+            rec['from_time'] = self.from_time
+            rec['to_time'] = self.to_time
+            rec['appear_time_field'] = self.appear_time_field
+            rec['request_unit_hours'] = self.request_unit_hours
+            rec['request_unit_half'] = self.request_unit_half
+            rec['request_hour_from'] = self.request_hour_from
+            rec['request_date_to'] = self.request_date_to
+        return res
