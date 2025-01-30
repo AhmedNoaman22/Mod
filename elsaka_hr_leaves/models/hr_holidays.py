@@ -145,8 +145,8 @@ class hr_leave(models.Model):
                                      ('category', 'By Employee Tag'),
                                      ('department', 'By Department')],
                                     string='Allocation Mode',
-                                    readonly=True, required=True,
-                                    states={'draft': [('readonly', False)], 'confirm': [('readonly', False)]})
+                                    required=True,
+                                    )
     remaining_permission = fields.Float(string='Remaining Permission')
 
     @api.onchange('employee_id')

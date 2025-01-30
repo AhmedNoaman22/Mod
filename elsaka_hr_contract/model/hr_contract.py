@@ -6,23 +6,9 @@ class hr_contract(models.Model):
     _inherit = "hr.contract"
 
     gross = fields.Monetary('Gross', digits=(16, 2), required=True, help="Employee's monthly gross wage.")
-    basic_insurance = fields.Float('Basic Insurance', digits=(16, 2), copy=False, store=True)
-    variable_insurance = fields.Float('Medical Insurance', digits=(16, 2), copy=False, store=True)
-    tax = fields.Float('Tax', digits=(16, 2), copy=False, store=True)
-    total_salary = fields.Float('Total Salary', digits=(16, 2), copy=False, store=True, compute="compute_total_salary")
+    basic_insurance = fields.Float('Basic Insurance')
+    variable_insurance = fields.Float('Variable Insurance')
     holiday_start_date = fields.Date('Holiday Start Date')
-
-    # for computing total_salary Total Salary = Wage +tax+medical insurance +insurance
-    @api.depends('wage','basic_insurance','variable_insurance','tax')
-    def compute_total_salary(self):
-        for rec in self:
-            rec.total_salary = rec.wage + rec.tax + rec.basic_insurance + rec.variable_insurance
-
-    # for computing total_salary  during view
-    @api.onchange('wage','basic_insurance','variable_insurance','tax')
-    def _onchange_compute_total_salary(self):
-        for rec in self:
-            rec.total_salary = rec.wage + rec.tax + rec.basic_insurance + rec.variable_insurance
 
     @api.constrains('employee_id', 'date_start', 'date_end')
     def check_contract(self):

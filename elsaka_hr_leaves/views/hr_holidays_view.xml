@@ -1,104 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
-<!-- HR HOLIDAYS VIEWS -->
-	<record model="ir.ui.view" id="hr_leave_view_form_rightechs">
-		<field name="name">hr.leave.view.form</field>
-        <field name="model">hr.leave</field>
-		<field name="inherit_id" ref="hr_holidays.hr_leave_view_form" />
-		<field name="arch" type="xml">
-			<xpath expr="//div[2]/div/group[1]" position="inside">
-				<field name="appear_time_field" invisible="0" />
-<!--				<field name="number_of_hours_display" class="oe_inline" />-->
-				<label for="from_time" string="From - To" invisible="0" />
-				<div invisible="0">
-					<field name="from_time" class="oe_inline" />
-					-
-					<field name="to_time" class="oe_inline" />
-					<div>
-						<field name="total_hours" readonly="0" class="oe_inline" />Hours
-					</div>
-					<div>24 Hours Format</div>
-					<div>08.30 = 08 hours and 30 minutes</div>
-					<div>18.45 = 18 hours and 45 minutes</div>
-					<label for="half_day" string="Half Leave" invisible="appear_time_field == True" />
-                    <div invisible="appear_time_field == True">
-                        <field name="half_day" class="oe_inline" />
-                        <label for="half_day_type" string=" - " invisible="half_day == False" />
-                        <field name="half_day_type" class="oe_inline" widget="radio" invisible="half_day == False" />
-                    </div>
-				</div>
-			</xpath>
-			<xpath expr="//field[@name='employee_id']" position="after">
-				<field name="create_uid" invisible="1" />
-				<field name="remaining_permission" readonly="1" invisible="appear_time_field == False and create_uid != False" />
-			</xpath>
-		</field>
-	</record>
-
-<!-- HOLIDAY STATUS VIEWS -->
-	<record model="ir.ui.view" id="edit_holiday_status_form_inherit">
-            <field name="name">hr.leave.type.form</field>
-            <field name="model">hr.leave.type</field>
-            <field name="priority">17</field>
-            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+        <!-- HR HOLIDAYS VIEWS -->
+        <record model="ir.ui.view" id="hr_leave_view_form_rightechs">
+            <field name="name">hr.leave.view.form</field>
+            <field name="model">hr.leave</field>
+            <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
             <field name="arch" type="xml">
-            	<xpath expr="//group/group[@name='leave_validation']" position="inside">
-            		<field name="emergency" />
-                    <field name="appear_time_field" />
-                    <field name="can_be_req_before" />
-                    <field name="can_be_req_after" />
-            	</xpath>
+                <xpath expr="//div[2]/div/group[1]" position="inside">
+                    <field name="appear_time_field" invisible="0"/>
+                    <!--				<field name="number_of_hours_display" class="oe_inline" />-->
+                    <label for="from_time" string="From - To" invisible="0"/>
+                    <div invisible="0">
+                        <field name="from_time" class="oe_inline"/>
+                        -
+                        <field name="to_time" class="oe_inline"/>
+                        <div>
+                            <field name="total_hours" readonly="0" class="oe_inline"/>Hours
+                        </div>
+                        <div>24 Hours Format</div>
+                        <div>08.30 = 08 hours and 30 minutes</div>
+                        <div>18.45 = 18 hours and 45 minutes</div>
+                        <label for="half_day" string="Half Leave" invisible="appear_time_field == True"/>
+                        <div invisible="appear_time_field == True">
+                            <field name="half_day" class="oe_inline"/>
+                            <label for="half_day_type" string=" - " invisible="half_day == False"/>
+                            <field name="half_day_type" class="oe_inline" widget="radio" invisible="half_day == False"/>
+                        </div>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='employee_id']" position="after">
+                    <field name="create_uid" invisible="1"/>
+
+                    <field name="remaining_permission" readonly="1"
+                           invisible="appear_time_field == False and create_uid != False"/>
+                </xpath>
             </field>
         </record>
 
-	
+        <!-- HOLIDAY STATUS VIEWS -->
+        <record model="ir.ui.view" id="edit_holiday_status_form_inherit">
+            <field name="name">hr.leave.type.form</field>
+            <field name="model">hr.leave.type</field>
+            <field name="priority">17</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group[@name='leave_validation']" position="inside">
+                    <field name="emergency"/>
+                    <field name="appear_time_field"/>
+                    <field name="can_be_req_before"/>
+                    <field name="can_be_req_after"/>
+                </xpath>
+            </field>
+        </record>
 
-<!--	<record id="view_employee_form_leave_tech1" model="ir.ui.view">-->
-<!--		<field name="name">hr.employee.leave.form.inherit.tech1</field>-->
-<!--		<field name="model">hr.employee</field>-->
-<!--		<field name="inherit_id" ref="hr.view_employee_form" />-->
-<!--		<field name="arch" type="xml">-->
-<!--			<notebook position="inside">-->
-<!--				<page string="Leaves">-->
-<!--					<group>-->
-<!--						<group string="Leaves">-->
-<!--							<label for="remaining_leaves" />-->
-<!--							<div>-->
-<!--								<field name="remaining_leaves" class="oe_inline" />-->
-<!--								days-->
-<!--							</div>-->
-<!--							<label for="remaining_emergency" />-->
-<!--							<div>-->
-<!--								<field name="remaining_emergency" class="oe_inline" />-->
-<!--								days-->
-<!--							</div>-->
-<!--						</group>-->
-<!--						<group string="Permissions">-->
-<!--							<label for="monthly_permission" />-->
-<!--							<div>-->
-<!--								<field name="monthly_permission" class="oe_inline" readonly="1"/>-->
-<!--								Hours-->
-<!--							</div>-->
-<!--							<label for="monthly_permission_taken" />-->
-<!--							<div>-->
-<!--								<field name="monthly_permission_taken" class="oe_inline" readonly="1"/>-->
-<!--								Hours-->
-<!--							</div>-->
-<!--							<label for="remaining_permission" />-->
-<!--							<div>-->
-<!--								<field name="remaining_permission" class="oe_inline" readonly="1"/>-->
-<!--								Hours-->
-<!--							</div>-->
-<!--							<button name="calc_permission_balance" string="Calculate Manually"-->
-<!--								type="object" class="oe_link" context="{'cron': True}" groups="hr.group_hr_user"/>-->
-<!--						</group>-->
-<!--					</group>-->
-<!--				</page>-->
-<!--			</notebook>-->
-<!--		</field>-->
-<!--	</record>-->
 
-	</data>
+        <!--	<record id="view_employee_form_leave_tech1" model="ir.ui.view">-->
+        <!--		<field name="name">hr.employee.leave.form.inherit.tech1</field>-->
+        <!--		<field name="model">hr.employee</field>-->
+        <!--		<field name="inherit_id" ref="hr.view_employee_form" />-->
+        <!--		<field name="arch" type="xml">-->
+        <!--			<notebook position="inside">-->
+        <!--				<page string="Leaves">-->
+        <!--					<group>-->
+        <!--						<group string="Leaves">-->
+        <!--							<label for="remaining_leaves" />-->
+        <!--							<div>-->
+        <!--								<field name="remaining_leaves" class="oe_inline" />-->
+        <!--								days-->
+        <!--							</div>-->
+        <!--							<label for="remaining_emergency" />-->
+        <!--							<div>-->
+        <!--								<field name="remaining_emergency" class="oe_inline" />-->
+        <!--								days-->
+        <!--							</div>-->
+        <!--						</group>-->
+        <!--						<group string="Permissions">-->
+        <!--							<label for="monthly_permission" />-->
+        <!--							<div>-->
+        <!--								<field name="monthly_permission" class="oe_inline" readonly="1"/>-->
+        <!--								Hours-->
+        <!--							</div>-->
+        <!--							<label for="monthly_permission_taken" />-->
+        <!--							<div>-->
+        <!--								<field name="monthly_permission_taken" class="oe_inline" readonly="1"/>-->
+        <!--								Hours-->
+        <!--							</div>-->
+        <!--							<label for="remaining_permission" />-->
+        <!--							<div>-->
+        <!--								<field name="remaining_permission" class="oe_inline" readonly="1"/>-->
+        <!--								Hours-->
+        <!--							</div>-->
+        <!--							<button name="calc_permission_balance" string="Calculate Manually"-->
+        <!--								type="object" class="oe_link" context="{'cron': True}" groups="hr.group_hr_user"/>-->
+        <!--						</group>-->
+        <!--					</group>-->
+        <!--				</page>-->
+        <!--			</notebook>-->
+        <!--		</field>-->
+        <!--	</record>-->
+
+    </data>
 </odoo>

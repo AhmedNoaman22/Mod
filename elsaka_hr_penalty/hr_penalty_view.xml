@@ -10,12 +10,6 @@
                 <xpath expr="//group/group/field[@name='structure_type_id']" position="after">
                     <field name="special_month" />
                 </xpath>
-                <xpath expr="//page[@name='information']/group" position="inside">
-                    <group string="Target Deduction">
-                        <field name="target_dedcution_hours" />
-                        <field name="target_dedcution_rate"/>
-                    </group>
-                </xpath>
                 <notebook position="inside">
                     <page string="Special Months" invisible="special_month != True">
                         <button name="calculate_working_hours" string="Calculate Target Hours" type="object" />
@@ -111,16 +105,6 @@
                                         <field name="no_sign_out_time" class="oe_inline" invisible="1" />
                                     </div>
                                 </group>
-                            </page>
-                            <page name="additional_flex_hours" string="Additional Flexible Hours">
-                                <field name="additional_flexible_line">
-                                    <list string="Additional Flexible Hours" editable="bottom">
-                                        <field name="from_time" required="1"/>
-                                        <field name="to_time" required="1"/>
-                                        <field name="flex_hours" required="1"/>
-                                        <field name="penalty_id" column_invisible="1"/>
-                                    </list>
-                                </field>
                             </page>
                         </notebook>
                     </sheet>
@@ -267,47 +251,30 @@
                             <button string="Calculate Delay" name="calc_delay" type="object" groups="hr.group_hr_user" invisible="state not in ['draft', '1approve', '2approve', '']" />
                             <field name="employee_delay_line" readonly="1">
                                 <list string="Lines" editable="top">
-                                    <field name="employee_delay_id"  column_invisible="1"/>
+                                    <field name="employee_delay_id" invisible="1" />
                                     <field name="date" />
                                     <field name="time_diff" sum="time_diff" />
                                     <field name="type" />
                                     <field name="permission" />
                                     <field name="permission_hours" sum="permission_hours" />
-                                    <field name="actual_delay" sum="actual_delay"  column_invisible="1"/>
+                                    <field name="actual_delay" sum="actual_delay" invisible="1" />
                                     <field name="ded_applied" sum="ded_applied" />
                                     <field name="deduction" sum="Total Deduction" />
                                     <field name="waive" groups="hr.group_hr_manager" />
                                     <field name="worked_hours" sum="Worked Hours" />
                                     <field name="working" sum="working" />
                                     <field name="note" />
-                                    <button name="action_waive" string="Toggle Waive" type="object" class="oe_link"  invisible="dont_show != False" />
-                                    <field name="dont_show" column_invisible="1"/>
-                                    <field name="first_signin"/>
-                                    <field name="last_signout"/>
-                                    <field name="allowed_nextday"/>
-                                    <field name="odd_action" column_invisible="1"/>
-                                    <field name="travel_alw"/>
+                                    <button name="action_waive" string="Toggle Waive" type="object" class="oe_link" invisible="dont_show != False" />
+                                    <field name="dont_show" invisible="1" />
                                 </list>
                             </field>
-                            <group col="2">
-                                <group>
-                                    <field name="total_late_deduction" />
-                                    <field name="total_absent_deduction" />
-                                    <field name="total_waived_deduction" />
-                                    <field name="target_deduction"/>
-                                    <field name="total_deduction" />
-                                    <field name="has_ramadan" invisible="1"/>
-                                </group>
-                                <group>
-                                    <field name="total_worked_hours" />
-                                    <field name="total_working" />
-                                    <field name="total_target_hours"/>
-                                    <field name="total_hours_deduction"/>
-                                    <field name="total_permission_hours"/>
-                                    <field name="total_late_signin"/>
-                                    <field name="total_early_signout"/>
-                                    <field name="total_actual_delay" />
-                                </group>
+                            <group col="4">
+                                <field name="total_late_deduction" />
+                                <field name="total_waived_deduction" />
+                                <field name="total_deduction" />
+                                <field name="total_worked_hours" />
+                                <field name="total_working" />
+                                <field name="total_actual_delay" invisible="1" />
                             </group>
                         </page>
                     </notebook>
@@ -323,12 +290,9 @@
                     <field name="employee_id" />
                     <field name="department_id" />
                     <field name="date_from" />
-                    <field name="date_to"/>
+                    <field name="date_to" />
                     <field name="total_late_deduction" />
-                    <field name="total_absent_deduction" />
                     <field name="total_waived_deduction" />
-                    <field name="total_hours_deduction"/>
-                    <field name="target_deduction"/>
                     <field name="total_deduction" />
                     <field name="state" />
                 </list>
