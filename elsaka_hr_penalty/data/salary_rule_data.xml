@@ -6,14 +6,6 @@
             <field name="code">DED</field>
         </record>
 
-
-        <!--*********** Target Deduction ************** -->
-        <record id="hr_salary_rule_input_target_deduction" model="hr.payslip.input.type">
-            <field name="name">Target Deduction</field>
-            <field name="code">TARGETDEDUCTION</field>
-            <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]" />
-        </record>
-
         <!--*********** Paid Leaves ************** -->
         <record id="hr_salary_rule_input_leaves_days" model="hr.payslip.input.type">
             <field name="code">CLD</field>
@@ -33,7 +25,6 @@
             <field name="name">Rest Days</field>
             <field name="struct_ids" eval="[(4, ref('hr_payroll.structure_002'))]" />
         </record>
-
         <record id="hr_salary_rule_input_leaves_rest_days" model="hr.payslip.input.type">
             <field name="code">RDA</field>
             <field name="name">Rest Days Amount</field>

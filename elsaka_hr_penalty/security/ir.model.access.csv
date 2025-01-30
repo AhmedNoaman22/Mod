@@ -10,6 +10,4 @@ hr_attendance.access_hr_attendance_system_user,hr.attendance.system.user,hr_atte
 access_hr_attendance_manager,hr.attendance.manager,hr_attendance.model_hr_attendance,hr.group_hr_manager,1,1,1,1
 access_hr_payslip_line_employee,hr.payslip.line,hr_payroll.model_hr_payslip_line,base.group_user,1,0,0,0
 access_hr_payslip_input_user_employee,hr.payslip.input.employee,hr_payroll.model_hr_payslip_input,base.group_user,1,0,0,0
-access_additional_flexible_hours_employee,additional_flexible_hours_employee,model_additional_flexible_hours,base.group_user,1,0,0,0
-access_additional_flexible_hours,additional_flexible_hours,model_additional_flexible_hours,hr.group_hr_manager,1,1,1,1
 access_hr_penalty_absent_line,hr_penalty_absent_line,model_hr_penalty_absent_line,base.group_user,1,1,1,0

@@ -23,11 +23,11 @@
     'name': 'Elsaka HR Penalty KSA',
     'version': '17.0',
     'category': 'Human Resources',
-    'description': """ Human Resources for penalty on employee
+    'description': """
     """,
     'author': 'Ahmed Elsaka',
     'website': 'https://www.elsaka.com',
-    'depends': ['hr_attendance', 'hr', 'hr_contract', 'elsaka_hr_contract', 'elsaka_hr_shifts', 'elsaka_hr_leaves',
+    'depends': ['hr_attendance', 'hr', 'hr_contract', 'elsaka_hr_contract', 'elsaka_hr_shifts',
                 'hr_payroll','hr_attendance','hr_timesheet', 'hr_payroll'],
     'data': [
         'hr_penalty_view.xml',
