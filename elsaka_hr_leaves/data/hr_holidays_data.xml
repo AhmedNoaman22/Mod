@@ -10,12 +10,14 @@
     </data>
     <data noupdate="0">
 
-        <record forcecreate="True" id="ir_cron_permission_balance" model="ir.cron">
+        <record id="ir_cron_permission_balance" model="ir.cron">
             <field name="name">Permission Balance</field>
             <field eval="False" name="active"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">12</field>
             <field name="interval_type">hours</field>
+            <!--		<field name="numbercall">-1</field>-->
+<!--            <field eval="False" name="doall"/>-->
             <field name="model_id" ref="model_hr_employee"/>
             <field name="code">model.action_permission_balance()</field>
         </record>
