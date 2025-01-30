@@ -32,7 +32,7 @@
                 </xpath>
                 <xpath expr="//field[@name='employee_id']" position="after">
                     <field name="create_uid" invisible="1"/>
-                    <field name="holiday_type"/>
+
                     <field name="remaining_permission" readonly="1"
                            invisible="appear_time_field == False and create_uid != False"/>
                 </xpath>
