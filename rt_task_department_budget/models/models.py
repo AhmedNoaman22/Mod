@@ -8,6 +8,7 @@ class HrDepartment(models.Model):
     _inherit = 'hr.department'
 
     hour_cost = fields.Float(string='Hour Cost')
+    multiplier_percentage = fields.Float(string='Multiplier (%) Percentage', copy=False, store=True)
 
 
 class ProjectTask(models.Model):

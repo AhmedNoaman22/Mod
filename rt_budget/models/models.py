@@ -21,11 +21,11 @@ class ProjectProject(models.Model):
             res = budget_obj.sudo().create(val)
             return res
 
-
-class HrDepartment(models.Model):
-    _inherit = 'hr.department'
-
-    hour_cost = fields.Float(string='Hour Cost')
+#Added on rt_task_department
+# class HrDepartment(models.Model):
+#     _inherit = 'hr.department'
+#
+#     hour_cost = fields.Float(string='Hour Cost')
 
 
 class ProjectBudgetModel(models.Model):
@@ -53,9 +53,9 @@ class BudgetLine(models.Model):
     task_planned_hours = fields.Float(string='Budget Hours')
     actually_time_sheet_hour = fields.Float(string='Timesheets Hours')
     actually_cost_hour = fields.Float(string='Actually Cost')
-    multiplier = fields.Float(string='(%) Multiplier', default=65.0, store=True)
+    multiplier = fields.Float(string='(%) Multiplier', default=lambda self: self.department_id.multiplier_percentage if self.department_id else 0.0, compute="_compute_multiplier", store=True, copy=False, precompute=True)
     actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead')
-    pm_percentage = fields.Float(string='%PM', default=0)
+    pm_percentage = fields.Float(string='HOD', default=0)
     etc_hours = fields.Float(string='ETC Hours', default=0)
     etc_cost_planned = fields.Float(string='ETC Cost Planned', default=0)
     amount_planing_hours = fields.Float(string='Budget Amount')
@@ -63,11 +63,20 @@ class BudgetLine(models.Model):
 
     note = fields.Char(string='Note')
 
+    @api.depends('department_id')
+    def _compute_multiplier(self):
+        for rec in self:
+            if rec.department_id:
+                rec.multiplier = rec.department_id.multiplier_percentage
+            else:
+                rec.multiplier = 0.0
+
     @api.onchange('department_id')
     def _onchange_department(self):
         for rec in self:
             if rec.department_id:
                 rec.hour_cost = rec.department_id.hour_cost
+
     #
     # @api.model_create_multi
     # def create(self, vals_list):
