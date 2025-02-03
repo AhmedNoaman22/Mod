@@ -205,7 +205,7 @@ class BudgetLine(models.Model):
             print(f" 1.56 ====== value = {(1 + (line.multiplier / 100))}")
             line.amount_actually_hours = line.actually_cost_hour * (1 + (line.multiplier / 100))
 
-    pm_percentage = fields.Float(string='%PM', default=0, copy=False)
+    pm_percentage = fields.Float(string='HOD', default=0, copy=False)
     etc_hours = fields.Float(string='ETC Hours', default=0, copy=False, compute='_compute_etc_hours_cost')
     etc_cost_planned = fields.Float(string='ETC Cost Planned', default=0, copy=False, compute='_compute_etc_hours_cost')
 
