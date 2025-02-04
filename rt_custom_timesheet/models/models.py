@@ -110,10 +110,14 @@ class AccountAnalyticLine(models.Model):
     def _check_time_spent(self):
         for record in self:
             val = record.return_total_time_spent_in_day(record.date)
-            print('======= val ==========', val)
-            new_val = val + record.unit_amount
-            if new_val > record.total_attendance_hour:
-                raise UserError(_('Time Spent Greater Than Remaining'))
+            if val:
+                new_val = val + record.unit_amount
+                if new_val > record.total_attendance_hour:
+                    raise UserError(_('Time Spent Greater Than Remaining'))
+            else:
+                new_val = record.unit_amount
+                if new_val > record.total_attendance_hour:
+                    raise UserError(_('Time Spent Greater Than Remaining'))
 
     # @api.model
     # def create(self, vals):

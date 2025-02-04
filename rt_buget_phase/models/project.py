@@ -21,6 +21,7 @@ class ProjectProject(models.Model):
                     rec.phases_budgets_all = False
             else:
                 rec.phases_budgets_all = False
+
     def create_project_budget(self):
         budget_obj = self.env['project.budget'].sudo()
         for rec in self:
