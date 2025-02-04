@@ -26,7 +26,7 @@
     """,
     'author': 'Rightechs Solution',
     'website': 'rightechs.info',
-    'depends': ['base', 'hr_contract', 'hr_holidays', 'hr_payroll', 'elsaka_hr_leaves'],
+    'depends': ['base', 'hr_contract', 'hr_holidays', 'hr_payroll'],
     'data': [
         'security/ir_security.xml',
         'security/ir.model.access.csv',
