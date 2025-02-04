@@ -13,6 +13,7 @@ class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
     overtime = fields.Boolean(string="OverTime", default=False)
+    indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True)
     # overtime_amount = fields.Float(string="OverTime Amount", default=0.0, compute="_compute_overtime_amount")
 
     # def write(self, values):
@@ -71,6 +72,12 @@ class AccountAnalyticLine(models.Model):
                 print(f" Amount After ===> {amount}")
                 amount_converted = timesheet.employee_id.currency_id._convert(
                     amount, timesheet.account_id.currency_id or timesheet.currency_id, self.env.company, timesheet.date)
+                if timesheet.task_id:
+                    percentage = self.env['project.budget.line'].sudo().search([('task_id','=',timesheet.task_id.id)])[0].multiplier
+                    if percentage:
+                        timesheet.indirect_amount = amount_converted * (percentage/100)
+                    else:
+                        timesheet.indirect_amount = 0.0
                 res[timesheet.id].update({
                     'amount': amount_converted,
                 })

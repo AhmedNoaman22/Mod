@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='unit_amount']" position="after">
                     <field name="overtime" optional="show"/>
+                    <field name="indirect_amount" optional="show"/>
 <!--                    <field name="overtime_amount" optional="show" sum="Total" readonly="readonly_timesheet"/>-->
                 </xpath>
             </field>
@@ -20,6 +21,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='unit_amount']" position="after">
                     <field name="overtime"/>
+                    <field name="indirect_amount"/>
 <!--                    <field name="overtime_amount" optional="show" sum="Total" readonly="readonly_timesheet"/>-->
                 </xpath>
             </field>
