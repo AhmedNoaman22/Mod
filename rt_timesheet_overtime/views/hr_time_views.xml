@@ -26,7 +26,7 @@
             </field>
         </record>
 
-        <!-- Riightecchs form of analytic_items Inherit for indirect Amount -->
+        <!-- Riightecchs list of analytic_items Inherit for indirect Amount -->
         <record id="view_account_analytic_line_tree_inherit_indirect" model="ir.ui.view">
             <field name="name">account.analytic.line.list</field>
             <field name="model">account.analytic.line</field>
@@ -38,12 +38,24 @@
             </field>
         </record>
 
-        <!-- Riightecchs list of analytic_items Inherit for indirect Amount -->
+        <!-- Riightecchs form of analytic_items Inherit for indirect Amount -->
         <record id="view_account_analytic_line_form_inherit_indirect" model="ir.ui.view">
             <field name="name">account.analytic.line.form</field>
             <field name="model">account.analytic.line</field>
             <field name="priority">1</field>
             <field name="inherit_id" ref="analytic.view_account_analytic_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount']" position="after">
+                    <field name="indirect_amount"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Riightecchs pivot of analytic_items Inherit for indirect Amount -->
+        <record id="view_account_analytic_line_pivot_inherit_indirect" model="ir.ui.view">
+            <field name="name">account.analytic.line.pivot</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_line_pivot"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']" position="after">
                     <field name="indirect_amount"/>
