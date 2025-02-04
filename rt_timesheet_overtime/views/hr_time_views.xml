@@ -34,6 +34,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']" position="after">
                     <field name="indirect_amount" optional="show" sum="Total Indirect Amount"/>
+                    <field name="final_amount" optional="show" sum="Total Final Amount"/>
                 </xpath>
             </field>
         </record>
@@ -47,6 +48,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']" position="after">
                     <field name="indirect_amount"/>
+                    <field name="final_amount"/>
                 </xpath>
             </field>
         </record>
@@ -59,6 +61,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']" position="after">
                     <field name="indirect_amount" type="measure"/>
+                    <field name="final_amount" type="measure"/>
                 </xpath>
             </field>
         </record>

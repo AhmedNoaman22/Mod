@@ -14,6 +14,7 @@ class AccountAnalyticLine(models.Model):
 
     overtime = fields.Boolean(string="OverTime", default=False)
     indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True)
+    final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True)
     # overtime_amount = fields.Float(string="OverTime Amount", default=0.0, compute="_compute_overtime_amount")
 
     # def write(self, values):
@@ -78,6 +79,10 @@ class AccountAnalyticLine(models.Model):
                         timesheet.indirect_amount = amount_converted * (percentage/100)
                     else:
                         timesheet.indirect_amount = 0.0
+                else:
+                    timesheet.indirect_amount = 0.0
+                timesheet.final_amount = amount_converted + timesheet.indirect_amount
+
                 res[timesheet.id].update({
                     'amount': amount_converted,
                 })
