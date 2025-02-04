@@ -219,7 +219,7 @@ class patch_delay_cal(models.Model):
                 employee_delay_id = employee_delay_pool.create(emp_delay_data)
 
                 # CALL CALCULATION METHOD FOR EACH EMPLOYEE
-                employee_delay_pool.calc_delay()
+                employee_delay_id.calc_delay()
 
     def get_employee_shift(self, employee_id, date_from, date_to):
         employee_pool = self.env['hr.employee']
