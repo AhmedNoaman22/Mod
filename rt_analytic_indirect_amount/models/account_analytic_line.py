@@ -13,7 +13,7 @@ class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
     indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True,
-                                   compute="_compute_final_amount", required=True, precompute=True)
+                                   compute="_compute_indirect_amount", required=True, precompute=True)
     final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True,
                                 compute="_compute_final_amount", precompute=True)
 
@@ -22,7 +22,7 @@ class AccountAnalyticLine(models.Model):
         if 'amount' in values:
             self._compute_final_amount()
         if 'indirect_amount' in values:
-            self._compute_final_amount()
+            self._compute_indirect_amount()
         return res
 
     def create(self, values):
@@ -33,8 +33,8 @@ class AccountAnalyticLine(models.Model):
             self._compute_final_amount()
         return res
 
-    @api.depends('indirect_amount', 'amount')
-    def _compute_final_amount(self):
+    @api.depends('amount', 'task_id')
+    def _compute_indirect_amount(self):
         for rec in self:
             if rec.task_id:
                 percentage = self.env['project.budget.line'].sudo().search([('task_id', '=', rec.task_id.id)])[
@@ -43,6 +43,12 @@ class AccountAnalyticLine(models.Model):
                     rec.indirect_amount = rec.amount * (percentage / 100)
                 else:
                     rec.indirect_amount = 0.0
+            else:
+                rec.indirect_amount = 0.0
+
+    @api.depends('indirect_amount', 'amount')
+    def _compute_final_amount(self):
+        for rec in self:
             rec.final_amount = rec.amount + rec.indirect_amount
 
 
