@@ -51,15 +51,15 @@
                 </xpath>
                 <xpath expr="//t" position="inside">
                     <div class="d-flex justify-content-between">
-                        <label for="amount" string="Amount"/>
+                        <span class="justify-content-end">Amount</span>
                         <field class="justify-content-end" name="amount" widget="monetary"/>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <label for="indirect_amount" string="Indirect Amount"/>
+                        <span class="justify-content-end">Indirect Amount</span>
                         <field class="justify-content-end" name="indirect_amount" widget="monetary"/>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <label for="final_amount" string="Final Amount"/>
+                        <span class="justify-content-end">Final Amount</span>
                         <field class="justify-content-end" name="final_amount" widget="monetary"/>
                     </div>
                 </xpath>
