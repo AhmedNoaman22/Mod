@@ -47,9 +47,13 @@
             <field name="model">account.analytic.line</field>
             <field name="inherit_id" ref="analytic.view_account_analytic_line_kanban"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='amount']" position="after">
-                    <field class="justify-content-end" name="indirect_amount" widget="monetary"/>
-                    <field class="justify-content-end" name="final_amount" widget="monetary"/>
+                <xpath expr="//t" position="inside">
+                    <div class="d-flex justify-content-between">
+                        <field class="justify-content-end" name="indirect_amount" widget="monetary"/>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <field class="justify-content-end" name="final_amount" widget="monetary"/>
+                    </div>
                 </xpath>
             </field>
         </record>
