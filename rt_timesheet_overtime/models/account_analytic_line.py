@@ -13,15 +13,34 @@ class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
     overtime = fields.Boolean(string="OverTime", default=False)
-    # overtime_amount = fields.Float(string="OverTime Amount", default=0.0, compute="_compute_overtime_amount")
+    # indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True, required=True)
+    # final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True, compute="_compute_final_amount", precompute=True)
+    # # overtime_amount = fields.Float(string="OverTime Amount", default=0.0, compute="_compute_overtime_amount")
 
     # def write(self, values):
     #     res = super(AccountAnalyticLine, self).write(values)
-    #     if values.get('overtime'):
-    #         if values.get('overtime') == True:
-    #             # print(f" Amount overtime True===> {values.get('overtime')}")
-    #             self._timesheet_postprocess_values(values)
+    #     if 'overtime' in values:
+    #         self._compute_final_amount()
+    #     if 'amount' in values:
+    #         self._compute_final_amount()
+    #     if 'indirect_amount' in values:
+    #         self._compute_final_amount()
     #     return res
+    #
+    # def create(self, values):
+    #     res = super(AccountAnalyticLine, self).create(values)
+    #     if 'overtime' in values:
+    #         self._compute_final_amount()
+    #     if 'amount' in values:
+    #         self._compute_final_amount()
+    #     if 'indirect_amount' in values:
+    #         self._compute_final_amount()
+    #     return res
+
+    # @api.depends('indirect_amount','amount')
+    # def _compute_final_amount(self):
+    #     for rec in self:
+    #         rec.final_amount = rec.amount + rec.indirect_amount
 
     # @api.depends('overtime','unit_amount','employee_id')
     # def _compute_overtime_amount(self):
@@ -71,6 +90,16 @@ class AccountAnalyticLine(models.Model):
                 print(f" Amount After ===> {amount}")
                 amount_converted = timesheet.employee_id.currency_id._convert(
                     amount, timesheet.account_id.currency_id or timesheet.currency_id, self.env.company, timesheet.date)
+                # if timesheet.task_id:
+                #     percentage = self.env['project.budget.line'].sudo().search([('task_id','=',timesheet.task_id.id)])[0].multiplier
+                #     if percentage:
+                #         timesheet.indirect_amount = amount_converted * (percentage/100)
+                #     else:
+                #         timesheet.indirect_amount = 0.0
+                # else:
+                #     timesheet.indirect_amount = 0.0
+                # timesheet.final_amount = amount_converted + timesheet.indirect_amount
+
                 res[timesheet.id].update({
                     'amount': amount_converted,
                 })
