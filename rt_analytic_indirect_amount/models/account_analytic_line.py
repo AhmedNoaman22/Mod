@@ -12,8 +12,10 @@ from odoo.tools.translate import _
 class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
-    indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True, compute="_compute_final_amount", precompute=True)
-    final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True, compute="_compute_final_amount", precompute=True)
+    indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True,
+                                   compute="_compute_final_amount", required=True, precompute=True)
+    final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True,
+                                compute="_compute_final_amount", precompute=True)
 
     def write(self, values):
         res = super(AccountAnalyticLine, self).write(values)
@@ -31,7 +33,7 @@ class AccountAnalyticLine(models.Model):
             self._compute_final_amount()
         return res
 
-    @api.depends('indirect_amount','amount')
+    @api.depends('indirect_amount', 'amount')
     def _compute_final_amount(self):
         for rec in self:
             if rec.task_id:
@@ -41,8 +43,6 @@ class AccountAnalyticLine(models.Model):
                     rec.indirect_amount = rec.amount * (percentage / 100)
                 else:
                     rec.indirect_amount = 0.0
-            else:
-                rec.indirect_amount = 0.0
             rec.final_amount = rec.amount + rec.indirect_amount
 
 
