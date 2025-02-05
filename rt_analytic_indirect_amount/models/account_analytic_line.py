@@ -12,9 +12,9 @@ from odoo.tools.translate import _
 class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
-    indirect_amount = fields.Float(string="Indirect Amount", default=0.0, copy=False, store=True,
+    indirect_amount = fields.Monetary(string="Indirect Amount", default=0.0, copy=False, store=True,
                                    compute="_compute_indirect_amount", required=True, precompute=True)
-    final_amount = fields.Float(string="Final Amount", default=0.0, copy=False, store=True,
+    final_amount = fields.Monetary(string="Final Amount", default=0.0, copy=False, store=True,
                                 compute="_compute_final_amount", precompute=True)
 
     def write(self, values):
