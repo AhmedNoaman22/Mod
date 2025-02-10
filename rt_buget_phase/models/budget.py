@@ -10,7 +10,7 @@ class ProjectBudgetModel(models.Model):
     _inherit = 'project.budget'
     _description = 'project budget model inherit'
 
-    phase_id = fields.Many2one('project.phase', 'Phase', copy=False)
+    phase_ids = fields.Many2many('project.phase', 'Phase', copy=False)
     task_ids = fields.One2many('project.task', 'budget_id', copy=False)
     task_count = fields.Integer(compute='_compute_task_count')
     currency_id = fields.Many2one(
@@ -125,7 +125,8 @@ class BudgetLine(models.Model):
 
     task_id = fields.Many2one('project.task', 'Task', copy=False, store=True)
     project_id = fields.Many2one(related='budget_id.project_id', copy=False, store=True)
-    phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
+    phase_id = fields.Many2one('project.phase', 'Phase', copy=False)
+    # phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
 
 

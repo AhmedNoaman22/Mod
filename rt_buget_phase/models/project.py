@@ -14,25 +14,24 @@ class ProjectProject(models.Model):
     @api.depends('budget_ids', 'phase_ids')
     def compute_budget_all_done(self):
         for rec in self:
-            if rec.budget_ids and rec.phase_ids:
-                if len(rec.budget_ids.ids) == len(rec.phase_ids.ids) or len(rec.budget_ids.ids) > len(rec.phase_ids.ids):
-                    rec.phases_budgets_all = True
-                else:
-                    rec.phases_budgets_all = False
+            if rec.budget_ids:
+                rec.phases_budgets_all = True
+                # if len(rec.budget_ids.ids) == len(rec.phase_ids.ids) or len(rec.budget_ids.ids) > len(rec.phase_ids.ids):
+                #     rec.phases_budgets_all = True
+                # else:
+                #     rec.phases_budgets_all = False
             else:
                 rec.phases_budgets_all = False
 
-    def create_project_budget(self):
-        budget_obj = self.env['project.budget'].sudo()
-        for rec in self:
-            val = rec.project_budget_vals()
-            for phase in self.phase_ids:
-                budget_id = budget_obj.search([('phase_id', '=', phase.id)], limit=1)
-                if not budget_id:
-                    val['phase_id'] = phase and phase.id or False
-                    val['name'] = self.name + '/' + phase.name
-                    phase.phase_budget_done = True
-                    budget_id = budget_obj.sudo().create(val)
+    # def create_project_budget(self):
+    #     budget_obj = self.env['project.budget'].sudo()
+    #     for rec in self:
+    #         val = rec.project_budget_vals()
+            # for phase in self.phase_ids:
+            #     budget_id = budget_obj.search([('phase_id', '=', phase.id)], limit=1)
+            #     if not budget_id:
+            #         phase.phase_budget_done = True
+            #         budget_id = budget_obj.sudo().create(val)
 
     budget_count = fields.Integer(compute='_compute_budget_count')
 

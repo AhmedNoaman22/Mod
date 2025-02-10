@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Rt Buget Phase",
+    'name': "Rt Budget Phase",
 
     'summary': "Rt Budget Phase module related with rt_project_phase and rt_budget",
 
@@ -15,7 +15,7 @@
     'category': 'Project',
     'version': '1.0',
 
-    'depends': ['base', 'project', 'hr_timesheet', 'analytic', 'hr', 'hr_contract', 'hr_hourly_cost', 'rt_project_phase', 'rt_budget', 'timesheet_grid'],
+    'depends': ['base', 'project', 'hr_timesheet', 'analytic', 'hr', 'hr_contract', 'hr_hourly_cost', 'rt_project_phase', 'rt_budget', 'timesheet_grid', 'sale'],
 
     # always loaded
     'data': [
