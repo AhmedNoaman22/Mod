@@ -50,7 +50,7 @@
                                 <field name="date_to"/>
                             </group>
                             <group>
-                                <field name="project_id" readonly="state == 'done'"/>
+                                <field name="project_id" readonly="state not in ('to_confirm', 'confirmed')"/>
                             </group>
                         </group>
                         <notebook>
