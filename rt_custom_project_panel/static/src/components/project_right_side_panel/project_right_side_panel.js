@@ -46,6 +46,26 @@ patch(ProjectRightSidePanel.prototype, {
         });
     },
 
+    async onBudgetLineItemActionClick(_id) {
+        return this.actionService.doAction({
+                type: "ir.actions.act_window",
+                res_model: 'project.budget.line',
+                res_id: _id,
+                views: [[false, "form"]],
+                target: "current"
+        });
+    },
+
+    async onBudgetLineItemActionListClick(_ids) {
+        return this.actionService.doAction({
+                type: "ir.actions.act_window",
+                res_model: 'project.budget.line',
+                views: [[false, "list"]],
+                target: "current",
+                domain: [["id", "in", _ids]]
+        });
+    },
+
 
 
 });

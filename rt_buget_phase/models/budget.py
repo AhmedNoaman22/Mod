@@ -10,6 +10,7 @@ class ProjectBudgetModel(models.Model):
     _inherit = 'project.budget'
     _description = 'project budget model inherit'
 
+
     phase_ids = fields.Many2many('project.phase', 'Phase', copy=False)
     task_ids = fields.One2many('project.task', 'budget_id', copy=False)
     task_count = fields.Integer(compute='_compute_task_count')
@@ -28,6 +29,20 @@ class ProjectBudgetModel(models.Model):
     total_amount_plan_hours = fields.Monetary(string="Total Planned Cost", store=True, compute='_compute_totals', tracking=4)
     total_amount_actual_hours = fields.Monetary(string="Total Actual Cost", store=True, compute='_compute_totals', tracking=4)
 
+    @api.onchange('budget_line_ids','budget_line_ids.phase_id')
+    def _compute_onchange_phase(self):
+        for rec in self:
+            if rec.budget_line_ids:
+                phases = []
+                for line in rec.budget_line_ids:
+                    if line.phase_id:
+                        phases.append(line.phase_id.id)
+                print(f'===> phases===={phases}')
+                if phases:
+                    rec.phase_ids = self.env['project.phase'].sudo().search([('id','in',phases)])
+                    print(f'===> rec phases===={rec.phase_ids}')
+
+
 
     @api.depends('budget_line_ids', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_actually_hours')
     def _compute_totals(self):
@@ -45,7 +60,7 @@ class ProjectBudgetModel(models.Model):
     def _compute_task_count(self):
         for budget in self:
             tasks = self.env['project.task'].search([('id', 'in', budget.task_ids.ids)])
-            print(f'phases_ids====> {len(tasks)}')
+            print(f'tasks====> {len(tasks)}')
             budget.task_count = len(tasks)
 
     def action_view_task(self):
@@ -136,6 +151,19 @@ class BudgetLine(models.Model):
     actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False)
     amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False)
     amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False)
+
+
+    def write(self, values):
+        res = super(BudgetLine, self).write(values)
+        if 'phase_id' in values:
+            self.budget_id._compute_onchange_phase()
+        return res
+
+    def create(self, values):
+        res = super(BudgetLine, self).create(values)
+        if 'phase_id' in values:
+            self.budget_id._compute_onchange_phase()
+        return res
 
     def unlink(self):
         for rec in self:

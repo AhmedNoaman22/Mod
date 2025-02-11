@@ -6,7 +6,32 @@
             <field name="model">project.budget</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button name="action_to_confirm" invisible="state != 'draft'" string="To Confirm" type="object"
+                                groups="rt_budget.group_project_budget_internal_user"
+                                class="oe_highlight"
+                                data-hotkey="l"/>
+                        <button name="action_confirm"
+                                string="Confirm" type="object"
+                                invisible="state != 'to_confirm'"
+                                groups="rt_budget.group_project_budget_manager"
+                                class="oe_highlight"
+                                data-hotkey="m"/>
+                        <button name="action_done"
+                                string="Approve" type="object"
+                                invisible="state != 'confirmed'"
+                                groups="rt_budget.group_project_budget_manager"
+                                class="oe_highlight"
+                                data-hotkey="m"/>
+                        <button name="action_reset" invisible="state in ('draft','confirmed','done')" string="Reset" type="object"
+                                class="oe_highlight" groups="base.group_user" data-hotkey="q"/>
+                        <field name="state" widget="statusbar" readonly="1"/>
+                        <button name="action_cancel" invisible="state in ('confirmed','done', 'cancel')" string="Cancel"
+                                groups="base.group_user" type="object" data-hotkey="x"/>
+
+                    </header>
                     <sheet>
+                        <field name="state" incvisible="1"/>
                         <div id="budget" name="Budget">
                             <group>
                                 <group>
@@ -25,7 +50,7 @@
                                 <field name="date_to"/>
                             </group>
                             <group>
-                                <field name="project_id"/>
+                                <field name="project_id" readonly="state == 'done'"/>
                             </group>
                         </group>
                         <notebook>

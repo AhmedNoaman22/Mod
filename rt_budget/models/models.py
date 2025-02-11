@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
 
 
 class ProjectProject(models.Model):
@@ -35,6 +36,54 @@ class ProjectBudgetModel(models.Model):
     name = fields.Char(string="Name", required=True)
     company_id = fields.Many2one(comodel_name='res.company', default='lambda self: self.env.user.company_id.id',
                                  string="Company", required=True)
+
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('to_confirm', 'To Confirm'),
+        ('confirmed', 'Confirmed'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+    ], string='Status', default='draft',
+        copy=False, index=True, readonly=True, store=True, tracking=True,
+        help=" * Draft: The Budget is not to confirm or confirmed yet. Saving and to confirm firstly to apply.\n"
+             " * To Confirm: The budget is to_confirm for responsible to confirm it.\n"
+             " * Confirmed: The budget is confirmed for this project.\n"
+             " * Done: The Budget has been processed.\n"
+             " * Cancelled: The Budget has been cancelled.")
+
+    def action_to_confirm(self):
+        for rec in self:
+            rec.state = 'to_confirm'
+
+    def action_confirm(self):
+        for rec in self:
+            if rec.project_id == False:
+                raise UserError(
+                    _("You can’t confirm any Budget without Project. Please add Project to confirm this Budget."))
+            else:
+                rec.state = 'confirmed'
+
+    def action_done(self):
+        for rec in self:
+            if rec.project_id == False:
+                raise UserError(
+                    _("You can’t confirm any Budget without Project. Please add Project to confirm this Budget."))
+            else:
+                rec.state = 'done'
+
+    def action_cancel(self):
+        for budget in self:
+            if budget.project_id:
+                raise UserError(
+                    _("You can’t cancel any Budget with Project"))
+            else:
+                budget.state = 'cancel'
+
+    def action_reset(self):
+        for request in self:
+            request.state = 'draft'
+        return True
+
     date_from = fields.Date(string="Date From")
     date_to = fields.Date(string="Date To")
     project_id = fields.Many2one(comodel_name='project.project', string="Project")

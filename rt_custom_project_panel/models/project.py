@@ -29,7 +29,18 @@ class CustomProject(models.Model):
             'total': self.env['project.budget'].sudo().search_count(domain),
             'data': {},
             # 'data': rec.read(['id']),
-            'data': rec.read(['id', 'name', 'phase_id', 'date_from', 'date_to']),
+            'data': rec.read(['id', 'name', 'date_from', 'date_to']),
+            'rec_ids': rec.ids,
+        }
+
+    def _get_custom_budget_lines_items(self):
+        domain = [('project_id', '=', self.id)]
+        rec = self.env['project.budget.line'].search(domain, limit=100)
+        return {
+            'total': self.env['project.budget.line'].sudo().search_count(domain),
+            'data': {},
+            # 'data': rec.read(['id']),
+            'data': rec.read(['id', 'name', 'department_id' ,'phase_id' ,'amount_planing_hours', 'amount_actually_hours']),
             'rec_ids': rec.ids,
         }
 
@@ -39,5 +50,6 @@ class CustomProject(models.Model):
             **panel_data,
             'phase_items': self._get_phase_items(),
             'custom_budget_items': self._get_custom_budget_items(),
+            'custom_budget_lines_items': self._get_custom_budget_lines_items(),
         }
         return data

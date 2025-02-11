@@ -12,6 +12,18 @@
             <xpath expr="//field[@name='budget_line_ids']" position="before">
                 <button name="create_Tasks" string="Create Tasks" type="object"/>
             </xpath>
+
+            <xpath expr="//page[@name='budget']" position="after">
+                <page name="phases" string="Phases">
+                    <field name="phase_ids" mode="list,kanban" widget="one2many" readonly="True">
+                        <list string="phase">
+                            <field name="ph_reference"/>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
             <!-- Added for Mod company changing-->
             <xpath expr="//field[@name='budget_line_ids']/list/field[@name='department_id']" position="after">
                 <field name="phase_id" domain="[('project_id','=',project_id)]"/>
@@ -114,15 +126,17 @@
               sequence="1"
               action="budget_line_action_window"/>
 
-    <menuitem name="Project Budgets" id="project_budget_sale_menu"
+    <menuitem name="Projects Budgets" id="project_budget_sale_menu"
               parent="sale.sale_menu_root"
               sequence="152" />
+
     <menuitem name="Budgets" id="budget_sale_model_menu"
               parent="project_budget_sale_menu"
               sequence="0"
               action="rt_budget.budget_action_window"/>
-    <menuitem name="Budgets Lines" id="budget_line_model_menu"
-              parent="rt_budget.project_budget_menu"
+
+    <menuitem name="Budgets Lines" id="budget_line_sale_model_menu"
+              parent="project_budget_sale_menu"
               sequence="1"
               action="budget_line_action_window"/>
 

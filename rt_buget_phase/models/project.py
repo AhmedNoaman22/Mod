@@ -23,15 +23,10 @@ class ProjectProject(models.Model):
             else:
                 rec.phases_budgets_all = False
 
-    # def create_project_budget(self):
-    #     budget_obj = self.env['project.budget'].sudo()
-    #     for rec in self:
-    #         val = rec.project_budget_vals()
-            # for phase in self.phase_ids:
-            #     budget_id = budget_obj.search([('phase_id', '=', phase.id)], limit=1)
-            #     if not budget_id:
-            #         phase.phase_budget_done = True
-            #         budget_id = budget_obj.sudo().create(val)
+    def create_project_budget(self):
+        res = super(ProjectProject, self).create_project_budget()
+        self.project_update_all_action()
+        return res
 
     budget_count = fields.Integer(compute='_compute_budget_count')
 
@@ -75,7 +70,7 @@ class ProjectProject(models.Model):
                 'text': _lt('Create Budget'),
                 'action_type': 'object',
                 'action': 'create_project_budget',
-                'show': self_sudo.display_sales_stat_buttons and self_sudo.phases_budgets_all == False,
+                'show': self_sudo.display_sales_stat_buttons,
                 'sequence': 8,
             })
 

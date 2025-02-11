@@ -8,6 +8,6 @@ class ProjectPhase(models.Model):
     _description = 'project phase model inherit'
 
     phase_budget_done = fields.Boolean(string='Budget Ok', default=False, store=True)
-    budget_ids = fields.One2many('project.budget', 'phase_id', 'Budgets', copy=False)
+    budget_line_ids = fields.One2many('project.budget.line', 'phase_id', 'Budgets Lines', copy=False)
     partner_ids = fields.Many2many('res.partner', 'Customers', copy=False)
 

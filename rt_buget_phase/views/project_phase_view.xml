@@ -7,18 +7,19 @@
         <field name="inherit_id" ref="rt_project_phase.view_project_phase_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='tasks']" position="before">
-                <page name="tasks" string="Budgets">
+                <page name="tasks" string="Budgets Lines">
                     <field
-                            name="budget_ids"
+                            name="budget_line_ids"
                             widget="section_and_note_one2many"
                             mode="list,kanban"
                     >
                         <list string="Budgets Lines" create="0" edit="0" delete="0">
                             <field name="name"/>
-                            <field name="company_id"/>
-                            <field name="currency_id" column_invisible="True"/>
-                            <field name="total_amount_plan_hours" sum="Total Amount Planning Hours"/>
-                            <field name="total_amount_actual_hours" sum="Total Amount Actual Hours"/>
+                            <field name="budget_id"/>
+                            <field name="department_id"/>
+                            <field name="phase_id"/>
+                            <field name="amount_planing_hours" sum="Amount Planning Hours"/>
+                            <field name="amount_actually_hours" sum="Amount Actual Hours"/>
                         </list>
                     </field>
                 </page>

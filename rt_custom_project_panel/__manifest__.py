@@ -17,7 +17,7 @@
         'base', 'project',
         'account', 'stock', 'sale_timesheet',
         'sale', 'sale_project', 'timesheet_grid',
-        'purchase', 'account_accountant'],
+        'purchase', 'account_accountant','rt_buget_phase'],
 
     # always loaded
     'assets': {
