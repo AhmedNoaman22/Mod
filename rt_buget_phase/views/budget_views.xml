@@ -10,7 +10,7 @@
 <!--                <field name="phase_id" domain="[('project_id','=',project_id)]"/>-->
 <!--            </xpath>-->
             <xpath expr="//field[@name='budget_line_ids']" position="before">
-                <button name="create_Tasks" string="Create Tasks" type="object"/>
+                <button name="create_Tasks" string="Create Tasks" type="object" invisible="state != 'confirmed'"/>
             </xpath>
 
             <xpath expr="//page[@name='budget']" position="after">
@@ -25,8 +25,18 @@
                 </page>
             </xpath>
             <!-- Added for Mod company changing-->
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="sale_order_id"/>
+            </xpath>
+            <xpath expr="//field[@name='budget_line_ids']/list/field[@name='department_id']" position="before">
+                <field name="product_id" domain="[('type','=','service')]"/>
+            </xpath>
             <xpath expr="//field[@name='budget_line_ids']/list/field[@name='department_id']" position="after">
-                <field name="phase_id" domain="[('project_id','=',project_id)]"/>
+                <field name="phase_id" domain="[('project_id','=',project_id)]" readonly="parent.state not in ('to_confirm', 'confirmed')"/>
+            </xpath>
+            <xpath expr="//field[@name='budget_line_ids']/list/field[@name='etc_cost_planned']" position="after">
+                <field name="sale_percentage"/>
+                <field name="sale_price"/>
             </xpath>
             <xpath expr="//field[@name='budget_line_ids']" position="after">
                 <field name="currency_id" invisible="1" force-save="1"/>

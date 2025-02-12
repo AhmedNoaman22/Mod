@@ -57,6 +57,7 @@
                             <page name="budget" string="Budget">
                                 <field name="budget_line_ids" mode="list,kanban" widget="one2many">
                                     <list string="budget" editable="bottom">
+                                        <field name="state" column_invisible="1"/>
                                         <field name="name"/>
                                         <field name="department_id"/>
                                         <field name="amount_planing_hours"/>

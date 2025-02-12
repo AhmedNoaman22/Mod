@@ -97,6 +97,7 @@ class BudgetLine(models.Model):
 
     name = fields.Char(string="Name")
     budget_id = fields.Many2one('project.budget', string="Budget")
+    state = fields.Selection(related='budget_id.state', store=True)
     department_id = fields.Many2one(comodel_name="hr.department", string="Department")
     hour_cost = fields.Float(string='Department Hour Cost', readonly=True,  default=0.0)
     task_planned_hours = fields.Float(string='Budget Hours')

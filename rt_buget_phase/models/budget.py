@@ -11,6 +11,7 @@ class ProjectBudgetModel(models.Model):
     _description = 'project budget model inherit'
 
 
+    sale_order_id = fields.Many2one('sale.order', string="Sale Order")
     phase_ids = fields.Many2many('project.phase', 'Phase', copy=False)
     task_ids = fields.One2many('project.task', 'budget_id', copy=False)
     task_count = fields.Integer(compute='_compute_task_count')
@@ -140,6 +141,7 @@ class BudgetLine(models.Model):
 
     task_id = fields.Many2one('project.task', 'Task', copy=False, store=True)
     project_id = fields.Many2one(related='budget_id.project_id', copy=False, store=True)
+    product_id = fields.Many2one('product.product', string="Product")
     phase_id = fields.Many2one('project.phase', 'Phase', copy=False)
     # phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
@@ -151,7 +153,8 @@ class BudgetLine(models.Model):
     actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False)
     amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False)
     amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False)
-
+    sale_percentage = fields.Float(string='(%)Sale Percentage', default=0.0, copy=False, store=True)
+    sale_price = fields.Float(string='Sale Price', default=0.0, copy=False, store=True)
 
     def write(self, values):
         res = super(BudgetLine, self).write(values)
@@ -207,26 +210,26 @@ class BudgetLine(models.Model):
                 line.actually_cost_hours = 0.0
 
 
-    @api.onchange('task_planned_hours', 'hour_cost', 'amount_planing_hours')
+    @api.onchange('task_planned_hours', 'hour_cost', 'amount_planing_hours', 'multiplier')
     def onchange_task_planned_hours(self):
         for line in self:
-            line.amount_planing_hours = line.task_planned_hours * line.hour_cost
+            line.amount_planing_hours = line.task_planned_hours * line.hour_cost * (1 + (line.multiplier / 100))
 
-    @api.onchange('hour_cost', 'amount_planing_hours')
+    @api.onchange('hour_cost', 'amount_planing_hours', 'multiplier')
     def onchange_amount_planing_hours(self):
         for line in self:
-            line.task_planned_hours = line.amount_planing_hours / line.hour_cost if line.hour_cost != 0.0 else 0.0
+            line.task_planned_hours = line.amount_planing_hours / (line.hour_cost * (1 + (line.multiplier / 100))) if line.hour_cost != 0.0 else 0.0
 
-    @api.depends('task_planned_hours', 'hour_cost')
+    @api.depends('task_planned_hours', 'hour_cost', 'multiplier')
     def compute_amount_planing_hours(self):
         for line in self:
-            line.amount_planing_hours = line.task_planned_hours * line.hour_cost
+            line.amount_planing_hours = line.task_planned_hours * line.hour_cost * (1 + (line.multiplier / 100))
 
-    @api.depends('amount_planing_hours', 'hour_cost')
+    @api.depends('amount_planing_hours', 'hour_cost', 'multiplier')
     def inverse_compute_amount(self):
         for line in self:
             print(f'line hour cost ==== {line.hour_cost}')
-            line.task_planned_hours = line.amount_planing_hours / line.hour_cost if line.hour_cost != 0.0 else 0.0
+            line.task_planned_hours = line.amount_planing_hours / (line.hour_cost * (1 + (line.multiplier / 100))) if line.hour_cost != 0.0 else 0.0
 
     @api.depends('actually_cost_hour', 'actually_time_sheet_hour', 'multiplier')
     def compute_amount_actually_hours(self):
@@ -254,4 +257,10 @@ class BudgetLine(models.Model):
             else:
                 rec.etc_hours = 0.0
                 rec.etc_cost_planned = 0.0
+
+
+    def write(self, values):
+        res = super(BudgetLine, self).write(values)
+        self.budget_id._compute_totals()
+        return res
 
