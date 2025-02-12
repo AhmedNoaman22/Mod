@@ -10,8 +10,20 @@ class ProjectBudgetModel(models.Model):
     _inherit = 'project.budget'
     _description = 'project budget model inherit'
 
+    available_sale_order_ids = fields.Many2many(
+        comodel_name='sale.order',
+        compute='_compute_available_sale_order_ids',
+    )
 
-    sale_order_id = fields.Many2one('sale.order', string="Sale Order")
+    @api.depends_context('uid')
+    @api.depends('sale_order_id')
+    def _compute_available_sale_order_ids(self):
+        for rec in self:
+            choosen_sales = self.env['project.budget'].sudo().search([('sale_order_id','!=',False)]).sale_order_id.ids
+            print(f"=====not available ===== > {choosen_sales}")
+            rec.available_sale_order_ids = self.env['sale.order'].sudo().search([('id','not in',choosen_sales)])
+
+    sale_order_id = fields.Many2one('sale.order', string="Sale Order", domain="[('id','in',available_sale_order_ids)]")
     phase_ids = fields.Many2many('project.phase', 'Phase', copy=False)
     task_ids = fields.One2many('project.task', 'budget_id', copy=False)
     task_count = fields.Integer(compute='_compute_task_count')
