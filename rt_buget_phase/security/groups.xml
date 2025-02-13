@@ -1,15 +1,34 @@
 <odoo>
 
+
+        <!--Project category for groups -->
+        <record id="module_category_project_group" model="ir.module.category">
+            <field name="name">Project Groups</field>
+            <field name="description">Category For Mod Project</field>
+            <field name="sequence">7</field>
+        </record>
     <!-- Project Task Allocated Time User Group -->
     <record id="group_project_task_allocated_time" model="res.groups">
         <field name="name">Allow Change Task Allocated Time</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="module_category_project_group"/>
     </record>
 
     <!-- TimeSheet Hours spent User Group -->
     <record id="group_hr_lock_timesheet_hours_spent" model="res.groups">
         <field name="name">Allow Control Lock Timesheet Hours</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="module_category_project_group"/>
+    </record>
+
+
+    <!-- Add Create Tasks Group -->
+    <record id="group_budget_lien_create_tasks" model="res.groups">
+        <field name="name">Allow Create Tasks for Budget</field>
+        <field name="category_id" ref="module_category_project_group"/>
+    </record>
+<!--    Adding Group of adding new budget line for specific group-->
+    <record id="group_adding_new_budget_line" model="res.groups">
+        <field name="name">Allow Adding Budget lines</field>
+        <field name="category_id" ref="module_category_project_group"/>
     </record>
 
 

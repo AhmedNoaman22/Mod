@@ -10,7 +10,7 @@
 <!--                <field name="phase_id" domain="[('project_id','=',project_id)]"/>-->
 <!--            </xpath>-->
             <xpath expr="//field[@name='budget_line_ids']" position="before">
-                <button name="create_Tasks" string="Create Tasks" type="object" invisible="state != 'confirmed'"/>
+                <button name="create_Tasks" string="Create Tasks" type="object" groups="rt_buget_phase.group_budget_lien_create_tasks" invisible="state != 'confirmed'"/>
             </xpath>
 
             <xpath expr="//field[@name='date_to']" position="after">
@@ -32,7 +32,7 @@
                 <field name="sale_order_id"/>
             </xpath>
             <xpath expr="//field[@name='budget_line_ids']/list/field[@name='department_id']" position="before">
-                <field name="product_id" domain="[('type','=','service')]"/>
+                <field name="product_id" domain="[('type','=','service'),('service_tracking','!=','no')]"/>
             </xpath>
             <xpath expr="//field[@name='budget_line_ids']/list/field[@name='department_id']" position="after">
                 <field name="phase_id" domain="[('project_id','=',project_id)]" readonly="parent.state not in ('to_confirm', 'confirmed')"/>

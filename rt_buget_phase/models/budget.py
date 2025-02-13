@@ -113,10 +113,10 @@ class ProjectBudgetModel(models.Model):
         for rec in self:
             if rec.sale_order_id:
                 for budget_line in rec.budget_line_ids:
-                    if budget_line.id not in rec.sale_order_id.order_line.project_budget_line.ids:
+                    if not rec.sale_order_id.order_line or budget_line.id not in rec.sale_order_id.order_line.project_budget_line.ids:
                         self.env['sale.order.line'].sudo().create({
                             'order_id': rec.sale_order_id.id,
-                            'project_budget_line': rec.sale_order_id.id,
+                            'project_budget_line': budget_line.id,
                             'product_id': budget_line.product_id.id,
                             'price_unit': budget_line.sale_price,
                             'product_uom_qty': 1.0,
@@ -189,12 +189,12 @@ class BudgetLine(models.Model):
     # )
 
     @api.depends_context('uid')
-    @api.depends('product_id', 'sale_order_id', 'sale_order_id.order_line')
+    @api.depends('product_id', 'sale_order_id', 'project_id', 'sale_order_id.order_line')
     def _compute_phase_id(self):
         for rec in self:
             choosen_phases = self.env['sale.order.line'].sudo().search([('order_id','=',rec.sale_order_id.id),('product_id','=',rec.product_id.id),]).phase_id.ids
             print(f"===== Available Pahses ===== > {choosen_phases}")
-            rec.phase_id = self.env['project.phase'].sudo().search([('id','in',choosen_phases)])[0] if choosen_phases else False
+            rec.phase_id = self.env['project.phase'].sudo().search([('id','in',choosen_phases)])[0].id if choosen_phases else False
 
 
     task_id = fields.Many2one('project.task', 'Task', copy=False, store=True)
@@ -321,5 +321,13 @@ class BudgetLine(models.Model):
     def write(self, values):
         res = super(BudgetLine, self).write(values)
         self.budget_id._compute_totals()
+        return res
+
+    def create(self, values):
+        res = super(BudgetLine, self).create(values)
+        if not self.env.user.has_group('group_adding_new_budget_line'):
+            raise UserError(
+                _(f"Unable to Create this line as you don't have the group to create budget line ."))
+
         return res
 
