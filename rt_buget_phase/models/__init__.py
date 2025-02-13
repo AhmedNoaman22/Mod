@@ -2,6 +2,7 @@
 
 from . import models
 from . import budget
+from . import sale_order
 from . import project
 from . import project_phase
 from . import project_task

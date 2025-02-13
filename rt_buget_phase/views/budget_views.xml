@@ -13,6 +13,9 @@
                 <button name="create_Tasks" string="Create Tasks" type="object" invisible="state != 'confirmed'"/>
             </xpath>
 
+            <xpath expr="//field[@name='date_to']" position="after">
+                <button name="update_sale_order" string="Update Order" type="object" invisible="not sale_order_id"/>
+            </xpath>
             <xpath expr="//page[@name='budget']" position="after">
                 <page name="phases" string="Phases">
                     <field name="phase_ids" mode="list,kanban" widget="one2many" readonly="True">

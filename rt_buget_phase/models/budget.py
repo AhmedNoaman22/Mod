@@ -24,6 +24,7 @@ class ProjectBudgetModel(models.Model):
             rec.available_sale_order_ids = self.env['sale.order'].sudo().search([('id','not in',choosen_sales)])
 
     sale_order_id = fields.Many2one('sale.order', string="Sale Order", domain="[('id','in',available_sale_order_ids)]")
+    project_id = fields.Many2one(comodel_name='project.project', string="Project", compute="_compute_project", copy=False, store=True, precompute=True)
     phase_ids = fields.Many2many('project.phase', 'Phase', copy=False)
     task_ids = fields.One2many('project.task', 'budget_id', copy=False)
     task_count = fields.Integer(compute='_compute_task_count')
@@ -34,6 +35,18 @@ class ProjectBudgetModel(models.Model):
         precompute=True,
         ondelete='restrict'
     )
+
+    @api.depends('sale_order_id','sale_order_id.state','sale_order_id.order_line')
+    def _compute_project(self):
+        for rec in self:
+            print("confimed done on sale =====")
+            if rec.sale_order_id.order_line:
+                rec.project_id = rec.sale_order_id.order_line[0].project_id
+            elif rec.sale_order_id.project_id:
+                rec.project_id = rec.sale_order_id.project_id
+            else:
+                rec.project_id = False
+
     @api.depends('company_id')
     def _compute_currency_id(self):
         for rec in self:
@@ -96,6 +109,24 @@ class ProjectBudgetModel(models.Model):
             """),
         }
 
+    def update_sale_order(self):
+        for rec in self:
+            if rec.sale_order_id:
+                for budget_line in rec.budget_line_ids:
+                    if budget_line.id not in rec.sale_order_id.order_line.project_budget_line.ids:
+                        self.env['sale.order.line'].sudo().create({
+                            'order_id': rec.sale_order_id.id,
+                            'project_budget_line': rec.sale_order_id.id,
+                            'product_id': budget_line.product_id.id,
+                            'price_unit': budget_line.sale_price,
+                            'product_uom_qty': 1.0,
+                        })
+                    for line in rec.sale_order_id.order_line:
+                        if line.project_budget_line == budget_line:
+                            line.name = budget_line.name
+                            line.product_id = budget_line.product_id
+                            line.price_unit = budget_line.sale_price
+
 
 
     def create_Tasks(self):
@@ -151,10 +182,26 @@ class BudgetLine(models.Model):
     _inherit = 'project.budget.line'
     _description = 'project budget line inherit'
 
+
+    # available_phase_ids = fields.Many2many(
+    #     comodel_name='project.phase',
+    #     compute='_compute_available_phase_ids',
+    # )
+
+    @api.depends_context('uid')
+    @api.depends('product_id', 'sale_order_id', 'sale_order_id.order_line')
+    def _compute_phase_id(self):
+        for rec in self:
+            choosen_phases = self.env['sale.order.line'].sudo().search([('order_id','=',rec.sale_order_id.id),('product_id','=',rec.product_id.id),]).phase_id.ids
+            print(f"===== Available Pahses ===== > {choosen_phases}")
+            rec.phase_id = self.env['project.phase'].sudo().search([('id','in',choosen_phases)])[0] if choosen_phases else False
+
+
     task_id = fields.Many2one('project.task', 'Task', copy=False, store=True)
     project_id = fields.Many2one(related='budget_id.project_id', copy=False, store=True)
+    sale_order_id = fields.Many2one(related='budget_id.sale_order_id', copy=False, store=True)
     product_id = fields.Many2one('product.product', string="Product")
-    phase_id = fields.Many2one('project.phase', 'Phase', copy=False)
+    phase_id = fields.Many2one('project.phase', 'Phase', compute="_compute_phase_id", copy=False, store=True, precompute=True)
     # phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
 
