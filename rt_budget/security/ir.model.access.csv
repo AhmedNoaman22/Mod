@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_project_budget,project.budget,model_project_budget,base.group_user,1,1,1,1
-access_project_budget_line,budget.line,model_project_budget_line,base.group_user,1,1,1,1
