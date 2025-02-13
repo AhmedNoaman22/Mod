@@ -325,9 +325,9 @@ class BudgetLine(models.Model):
 
     def create(self, values):
         res = super(BudgetLine, self).create(values)
-        if not self.env.user.has_group('group_adding_new_budget_line'):
+        print(f"======>{self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line')}")
+        if self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line') == False:
             raise UserError(
                 _(f"Unable to Create this line as you don't have the group to create budget line ."))
-
         return res
 

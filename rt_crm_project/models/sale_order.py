@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     _description = 'Sale Order Inherit Crm'
 
     sale_scope_service_line_ids = fields.Char('Test')
-    project_location = fields.Many2one(comodel_name='res.country', string="Project Location", copy=False, store=True)
+    project_location = fields.Many2one(comodel_name='res.country', string="Project Location", store=True)
     project_city = fields.Many2one(comodel_name="res.country.state", string="Project City", )
     country_code2 = fields.Char(string="Country Code", related="project_location.code", copy=False, store=True)
     year = fields.Char(string="Year", copy=False, compute="_compute_num_of_year", store=True)
