@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+
+        <record id="create_project_budget_from_project" model="ir.ui.view">
+            <field name="name">create.project.budget.from.project</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="create_project_budget" string="Create Budget" type="object"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

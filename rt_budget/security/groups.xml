@@ -1,0 +1,26 @@
+<odoo>
+
+    <data>
+
+        <!--Project Budget category employees -->
+        <record id="module_category_project_budget" model="ir.module.category">
+            <field name="name">Project Budget</field>
+            <field name="description">Category For Mod Budget</field>
+            <field name="sequence">6</field>
+        </record>
+
+        <!-- Project Budget User Group -->
+        <record id="group_project_budget_internal_user" model="res.groups">
+            <field name="name">Budget User</field>
+            <field name="category_id" ref="module_category_project_budget"/>
+        </record>
+        <!-- Project Budget Manager Group -->
+        <record id="group_project_budget_manager" model="res.groups">
+            <field name="name">Budget Manager</field>
+            <field name="category_id" ref="module_category_project_budget"/>
+            <field name="implied_ids" eval="[(4, ref('group_project_budget_internal_user'))]"/>
+        </record>
+    </data>
+
+
+</odoo>
