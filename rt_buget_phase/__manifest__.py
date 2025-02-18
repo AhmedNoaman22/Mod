@@ -15,7 +15,7 @@
     'category': 'Project',
     'version': '1.0',
 
-    'depends': ['base', 'project', 'hr_timesheet', 'analytic', 'hr', 'hr_contract', 'hr_hourly_cost', 'rt_project_phase', 'rt_budget', 'timesheet_grid', 'sale', 'sale_project'],
+    'depends': ['base', 'project', 'hr_timesheet', 'analytic', 'hr', 'hr_contract', 'hr_hourly_cost', 'rt_project_phase', 'rt_budget', 'timesheet_grid', 'sale', 'crm', 'sale_project'],
 
     # always loaded
     'data': [

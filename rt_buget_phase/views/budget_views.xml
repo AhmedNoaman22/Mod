@@ -154,5 +154,19 @@
               sequence="1"
               action="budget_line_action_window"/>
 
+    <menuitem name="Projects Budgets" id="project_budget_crm_menu"
+              parent="crm.crm_menu_root"
+              sequence="152" />
+
+    <menuitem name="Budgets" id="budget_crm_model_menu"
+              parent="project_budget_crm_menu"
+              sequence="0"
+              action="rt_budget.budget_action_window"/>
+
+    <menuitem name="Budgets Lines" id="budget_line_crm_model_menu"
+              parent="project_budget_crm_menu"
+              sequence="1"
+              action="budget_line_action_window"/>
+
 
 </odoo>
