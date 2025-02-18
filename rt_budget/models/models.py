@@ -14,7 +14,7 @@ class ProjectProject(models.Model):
             'company_id': self.company_id.id or self.env.company.id,
         }
         return val
-
+    #Committed as demanded in mod
     def create_project_budget(self):
         budget_obj = self.env['project.budget']
         for rec in self:

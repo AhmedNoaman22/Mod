@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
-                    <button name="create_project_budget" string="Create Budget" type="object"/>
+<!--                    <button name="create_project_budget" string="Create Budget" type="object"/>-->
                 </xpath>
             </field>
         </record>
