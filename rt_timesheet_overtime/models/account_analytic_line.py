@@ -21,6 +21,11 @@ class AccountAnalyticLine(models.Model):
         res = super(AccountAnalyticLine, self).write(values)
         if 'overtime' in values:
             self._timesheet_postprocess(values)
+        if 'amount' in values:
+            if self.task_id:
+                budget_line = self.env['project.budget.line'].sudo().search([('task_id','=',self.task_id.id)])
+                if budget_line:
+                    budget_line.compute_actually_hours()
         return res
 
     def create(self, values):

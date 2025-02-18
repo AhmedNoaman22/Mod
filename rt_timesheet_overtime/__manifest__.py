@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr', 'analytic', 'hr_timesheet', 'timesheet_grid', 'hr_hourly_cost'],
+    'depends': ['base','hr', 'analytic', 'hr_timesheet', 'timesheet_grid', 'hr_hourly_cost', 'rt_buget_phase'],
 
     # always loaded
     'data': [
