@@ -38,6 +38,7 @@
                 <field name="phase_id" domain="[('project_id','=',project_id)]" readonly="parent.state not in ('to_confirm', 'confirmed')"/>
             </xpath>
             <xpath expr="//field[@name='budget_line_ids']/list/field[@name='etc_cost_planned']" position="after">
+                <field name="contingency"/>
                 <field name="sale_percentage"/>
                 <field name="sale_price"/>
             </xpath>

@@ -68,7 +68,15 @@ class ProjectBudgetModel(models.Model):
                     rec.phase_ids = self.env['project.phase'].sudo().search([('id','in',phases)])
                     print(f'===> rec phases===={rec.phase_ids}')
 
+    def create(self, values):
+        res = super(ProjectBudgetModel, self).create(values)
+        self._compute_totals()
+        return res
 
+    def write(self, values):
+        res = super(ProjectBudgetModel, self).write(values)
+        self._compute_totals()
+        return res
 
     @api.depends('budget_line_ids', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_actually_hours')
     def _compute_totals(self):
@@ -209,22 +217,28 @@ class BudgetLine(models.Model):
     actually_time_sheet_hour = fields.Float(string='Timesheets Hours', compute='compute_actually_hours')
     actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False)
     multiplier = fields.Float(string='(%) Multiplier', default=65, readonly=True)
-    actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False)
-    amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False)
-    amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False)
+    actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False, store=True, precompute=True)
+    amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False, store=True, precompute=True)
+    amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False, store=True, precompute=True)
     sale_percentage = fields.Float(string='(%)Sale Percentage', default=0.0, copy=False, store=True)
-    sale_price = fields.Float(string='Sale Price', default=0.0, copy=False, store=True)
+    contingency = fields.Float(string='(%) Contingency', default=0.0, copy=False, store=True)
+    sale_price = fields.Float(string='Sale Price', default=0.0, copy=False, store=True, precompute=True)
 
     def write(self, values):
         res = super(BudgetLine, self).write(values)
         if 'phase_id' in values:
             self.budget_id._compute_onchange_phase()
+        self.budget_id._compute_totals()
         return res
 
     def create(self, values):
         res = super(BudgetLine, self).create(values)
         if 'phase_id' in values:
             self.budget_id._compute_onchange_phase()
+        # print(f"======>{self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line')}")
+        if self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line') == False:
+            raise UserError(
+                _(f"Unable to Create this line as you don't have the group to create budget line ."))
         return res
 
     def unlink(self):
@@ -274,15 +288,21 @@ class BudgetLine(models.Model):
         for line in self:
             line.amount_planing_hours = line.task_planned_hours * line.hour_cost * (1 + (line.multiplier / 100))
 
-    @api.onchange('hour_cost', 'amount_planing_hours', 'multiplier')
+    @api.onchange('hour_cost', 'amount_planing_hours', 'multiplier', 'sale_percentage', 'contingency')
     def onchange_amount_planing_hours(self):
         for line in self:
             line.task_planned_hours = line.amount_planing_hours / (line.hour_cost * (1 + (line.multiplier / 100))) if line.hour_cost != 0.0 else 0.0
+            line.sale_price = line.amount_planing_hours * (1 + ((line.sale_percentage + line.contingency) / 100))
 
     @api.depends('task_planned_hours', 'hour_cost', 'multiplier')
     def compute_amount_planing_hours(self):
         for line in self:
             line.amount_planing_hours = line.task_planned_hours * line.hour_cost * (1 + (line.multiplier / 100))
+
+    @api.depends('amount_planing_hours', 'sale_percentage', 'contingency')
+    def compute_sale_price(self):
+        for line in self:
+            line.sale_price = line.amount_planing_hours * (1 + ((line.sale_percentage + line.contingency) / 100))
 
     @api.depends('amount_planing_hours', 'hour_cost', 'multiplier')
     def inverse_compute_amount(self):
@@ -318,16 +338,4 @@ class BudgetLine(models.Model):
                 rec.etc_cost_planned = 0.0
 
 
-    def write(self, values):
-        res = super(BudgetLine, self).write(values)
-        self.budget_id._compute_totals()
-        return res
-
-    def create(self, values):
-        res = super(BudgetLine, self).create(values)
-        print(f"======>{self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line')}")
-        if self.env.user.has_group('rt_buget_phase.group_adding_new_budget_line') == False:
-            raise UserError(
-                _(f"Unable to Create this line as you don't have the group to create budget line ."))
-        return res
 
