@@ -13,6 +13,22 @@ class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
 
     overtime = fields.Boolean(string="OverTime", default=False)
+
+
+
+    # Rightechs compute overtime if check change amount as per asked in mod company
+    def write(self, values):
+        res = super(AccountAnalyticLine, self).write(values)
+        if 'overtime' in values:
+            self._timesheet_postprocess(values)
+        return res
+
+    def create(self, values):
+        res = super(AccountAnalyticLine, self).create(values)
+        if 'overtime' in values:
+            self._timesheet_postprocess(values)
+        return res
+
     # Rightechs compute overtime if check change amount as per asked in mod company
     def _timesheet_postprocess_values(self, values):
         """ Get the addionnal values to write on record
