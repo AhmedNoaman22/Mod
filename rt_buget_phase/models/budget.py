@@ -210,7 +210,7 @@ class BudgetLine(models.Model):
     project_id = fields.Many2one(related='budget_id.project_id', copy=False, store=True)
     sale_order_id = fields.Many2one(related='budget_id.sale_order_id', copy=False, store=True)
     product_id = fields.Many2one('product.product', string="Product")
-    phase_id = fields.Many2one('project.phase', 'Phase', compute="_compute_phase_id", copy=False, store=True)
+    phase_id = fields.Many2one('project.phase', 'Phase', compute="_compute_phase_id", copy=False, store=True, precompute=True)
     # phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
 
@@ -218,7 +218,7 @@ class BudgetLine(models.Model):
     hour_cost = fields.Float(string='Department Hour Cost', readonly=True,  default=0.0, copy=False, store=True, precompute=True)
     task_planned_hours = fields.Float(string='Budget Hours', copy=False, store=True, precompute=True)
     actually_time_sheet_hour = fields.Float(string='Timesheets Hours', compute='compute_actually_hours', copy=False, store=True, precompute=True)
-    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False, store=True)
+    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False, store=True, precompute=True)
     multiplier = fields.Float(string='(%) Multiplier', default=65, readonly=True, store=True, precompute=True)
     actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False, precompute=True)
     amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False, precompute=True)
@@ -280,7 +280,7 @@ class BudgetLine(models.Model):
             if not hours_spent == 0.0:
                 line.actually_cost_hour = hours_cost * -1
                 # line.multiplier = ((hours_cost / hours_spent) * -1) * 0.65
-                line.actually_cost_hours = round(hours_cost * -1 * (1 + (line.multiplier / 100)),2)
+                line.actually_cost_hours = hours_cost * -1 * (1 + (line.multiplier / 100))
             else:
                 line.actually_cost_hour = 0.0
                 line.actually_cost_hours = 0.0
