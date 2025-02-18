@@ -81,6 +81,7 @@
                 <field name="currency_id" column_invisible="True"/>
                 <field name="total_amount_plan_hours" sum="Total Amount Planning Hours"/>
                 <field name="total_amount_actual_hours" sum="Total Amount Actual Hours"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'to_confirm')" decoration-muted="state == 'cancel'" decoration-bf="state == 'confirmed'" decoration-success="state == 'done'"/>
             </xpath>
         </field>
     </record>
@@ -103,9 +104,10 @@
                 <field name="amount_actually_hours" sum="Total Cost" force_save="1"/>
                 <field name="actually_time_sheet_hour" force_save="1"/>
 <!--                <field name="actually_cost_hours" sum="Total Actually Cost Hours"/>-->
-                <field name="pm_percentage"/>
+                <field name="pm_percentage" readonly="state in ('done', 'cancel')"/>
                 <field name="etc_hours"/>
                 <field name="etc_cost_planned" sum="Total ETC Cost Planned"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'to_confirm')" decoration-muted="state == 'cancel'" decoration-bf="state == 'confirmed'" decoration-success="state == 'done'"/>
                 </list>
         </field>
     </record>
