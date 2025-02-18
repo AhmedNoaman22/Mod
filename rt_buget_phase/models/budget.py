@@ -210,7 +210,7 @@ class BudgetLine(models.Model):
     project_id = fields.Many2one(related='budget_id.project_id', copy=False, store=True)
     sale_order_id = fields.Many2one(related='budget_id.sale_order_id', copy=False, store=True)
     product_id = fields.Many2one('product.product', string="Product")
-    phase_id = fields.Many2one('project.phase', 'Phase', compute="_compute_phase_id", copy=False, store=True, precompute=True)
+    phase_id = fields.Many2one('project.phase', 'Phase', compute="_compute_phase_id", copy=False, store=True)
     # phase_id = fields.Many2one(related='budget_id.phase_id', copy=False, store=True)
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
 
