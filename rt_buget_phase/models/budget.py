@@ -70,24 +70,25 @@ class ProjectBudgetModel(models.Model):
 
     def create(self, values):
         res = super(ProjectBudgetModel, self).create(values)
-        self._compute_totals()
+        if 'budget_line_ids' in values:
+            self._compute_totals()
         return res
 
     def write(self, values):
         res = super(ProjectBudgetModel, self).write(values)
-        self._compute_totals()
+        if 'budget_line_ids' in values:
+            self._compute_totals()
         return res
 
-    @api.depends('budget_line_ids', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_actually_hours')
+    @api.depends('budget_line_ids.amount_planing_hours', 'budget_line_ids.amount_actually_hours')
     def _compute_totals(self):
         for rec in self:
-            if rec.budget_line_ids:
-                rec.total_amount_plan_hours = sum(rec.budget_line_ids.mapped('amount_planing_hours'))
-                # total_cost = 0.0
-                # for line in rec.budget_line_ids:
-                #     total_cost = total_cost + line.amount_actually_hours
-                #
-                # rec.total_amount_actual_hours = total_cost
+            rec.total_amount_plan_hours = sum(rec.budget_line_ids.mapped('amount_planing_hours'))
+            # total_cost = 0.0
+            # for line in rec.budget_line_ids:
+            #     total_cost = total_cost + line.amount_actually_hours
+            #
+            # rec.total_amount_actual_hours = total_cost
             rec.total_amount_actual_hours = sum(self.budget_line_ids.mapped('amount_actually_hours'))
 
 
@@ -214,15 +215,17 @@ class BudgetLine(models.Model):
     company_id = fields.Many2one(related='budget_id.company_id', copy=False, store=True)
 
 
-    actually_time_sheet_hour = fields.Float(string='Timesheets Hours', compute='compute_actually_hours')
-    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False)
-    multiplier = fields.Float(string='(%) Multiplier', default=65, readonly=True)
-    actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False, store=True, precompute=True)
-    amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False, store=True, precompute=True)
-    amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False, store=True, precompute=True)
+    hour_cost = fields.Float(string='Department Hour Cost', readonly=True,  default=0.0, copy=False, store=True, precompute=True)
+    task_planned_hours = fields.Float(string='Budget Hours', copy=False, store=True, precompute=True)
+    actually_time_sheet_hour = fields.Float(string='Timesheets Hours', compute='compute_actually_hours', copy=False, store=True, precompute=True)
+    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False, store=True, precompute=True)
+    multiplier = fields.Float(string='(%) Multiplier', default=65, readonly=True, store=True, precompute=True)
+    actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False, precompute=True)
+    amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False, precompute=True)
+    amount_actually_hours = fields.Float(string='Total Cost', compute='compute_amount_actually_hours', copy=False, precompute=True)
     sale_percentage = fields.Float(string='(%)Sale Percentage', default=0.0, copy=False, store=True)
     contingency = fields.Float(string='(%) Contingency', default=0.0, copy=False, store=True)
-    sale_price = fields.Float(string='Sale Price', default=0.0, copy=False, store=True, precompute=True)
+    sale_price = fields.Float(string='Sale Price', default=0.0, compute='compute_sale_price', copy=False, store=True, precompute=True)
 
     def write(self, values):
         res = super(BudgetLine, self).write(values)
