@@ -218,7 +218,7 @@ class BudgetLine(models.Model):
     hour_cost = fields.Float(string='Department Hour Cost', readonly=True,  default=0.0, copy=False, store=True, precompute=True)
     task_planned_hours = fields.Float(string='Budget Hours', copy=False, store=True, precompute=True)
     actually_time_sheet_hour = fields.Float(string='Timesheets Hours', compute='compute_actually_hours', copy=False, store=True, precompute=True)
-    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False, store=True, precompute=True)
+    actually_cost_hour = fields.Float(string='Actually Cost', compute='compute_actually_hours', copy=False, store=True)
     multiplier = fields.Float(string='(%) Multiplier', default=65, readonly=True, store=True, precompute=True)
     actually_cost_hours = fields.Float(string='Actually Cost Hours + Indirect Overhead', compute='compute_actually_hours', copy=False, precompute=True)
     amount_planing_hours = fields.Float(string='Budget Amount', compute='compute_amount_planing_hours', inverse='inverse_compute_amount', copy=False, precompute=True)
