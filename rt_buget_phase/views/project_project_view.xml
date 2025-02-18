@@ -11,12 +11,6 @@
                     <field name="budget_count" widget="statinfo" string="Budgets"/>
                 </button>
             </xpath>
-<!--            <xpath expr="//button[@name='create_project_budget']" position="before">-->
-<!--                <field name="phases_budgets_all" invisible="1"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//button[@name='create_project_budget']" position="attributes">-->
-<!--                <attribute name="invisible">phases_budgets_all == True</attribute>-->
-<!--            </xpath>-->
         </field>
     </record>
 

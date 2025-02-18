@@ -23,10 +23,10 @@ class ProjectProject(models.Model):
             else:
                 rec.phases_budgets_all = False
 
-    def create_project_budget(self):
-        res = super(ProjectProject, self).create_project_budget()
-        self.project_update_all_action()
-        return res
+    # def create_project_budget(self):
+    #     res = super(ProjectProject, self).create_project_budget()
+    #     self.project_update_all_action()
+    #     return res
 
     budget_count = fields.Integer(compute='_compute_budget_count')
 
