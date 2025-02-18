@@ -280,7 +280,7 @@ class BudgetLine(models.Model):
             if not hours_spent == 0.0:
                 line.actually_cost_hour = hours_cost * -1
                 # line.multiplier = ((hours_cost / hours_spent) * -1) * 0.65
-                line.actually_cost_hours = hours_cost * -1 * (1 + (line.multiplier / 100))
+                line.actually_cost_hours = round(hours_cost * -1 * (1 + (line.multiplier / 100)),2)
             else:
                 line.actually_cost_hour = 0.0
                 line.actually_cost_hours = 0.0
