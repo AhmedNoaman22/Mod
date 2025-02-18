@@ -66,13 +66,14 @@ class ProjectProject(models.Model):
                 'show': self_sudo.display_sales_stat_buttons and self_sudo.budget_count > 0,
                 'sequence': 4,
             })
-            buttons.append({
-                'text': _lt('Create Budget'),
-                'action_type': 'object',
-                'action': 'create_project_budget',
-                'show': self_sudo.display_sales_stat_buttons,
-                'sequence': 8,
-            })
+            #Committed for Mod as per demanded
+            # buttons.append({
+            #     'text': _lt('Create Budget'),
+            #     'action_type': 'object',
+            #     'action': 'create_project_budget',
+            #     'show': self_sudo.display_sales_stat_buttons,
+            #     'sequence': 8,
+            # })
 
         return buttons
 
